@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gaita Walnut App</title>
+  <title>Gaita App</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #0d0d0d;
+      background-color: #000;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -25,40 +25,40 @@
       font-family: sans-serif;
     }
     
-    /* Κουρδιστήρι */
+    /* Κουρδιστήρι στο πάνω μέρος */
     .tuner-container {
       position: absolute;
-      top: 12px;
-      width: 88%;
-      max-width: 360px;
+      top: 10px;
+      width: 90%;
+      max-width: 380px;
       z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: rgba(20, 10, 5, 0.85);
-      padding: 10px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 8px 12px;
       border-radius: 12px;
-      border: 1px solid #d4b26f;
+      border: 1px solid rgba(255, 215, 0, 0.6);
     }
     .tuner-label {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
-      color: #d4b26f;
-      margin-bottom: 5px;
+      color: #ffd700;
+      margin-bottom: 4px;
     }
     .tuner-slider {
       width: 100%;
       height: 6px;
-      accent-color: #d4b26f;
+      accent-color: #ffd700;
       cursor: pointer;
     }
 
     .app-container {
       position: relative;
       width: 100vw;
-      max-width: 400px;
-      height: 85vh;
-      margin-top: 45px;
+      max-width: 420px;
+      height: 88vh;
+      margin-top: 40px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -69,31 +69,31 @@
       object-fit: contain;
     }
     
-    /* Μεγάλες τρύπες ευθυγραμμισμένες με την καρυδιά */
+    /* Μεγάλες διάφανες τρύπες ευθυγραμμισμένες με τους αυλούς */
     .hole {
       position: absolute;
-      width: 60px;
-      height: 60px;
+      width: 65px;
+      height: 65px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      border: 2px solid rgba(212, 178, 111, 0.8);
+      background: rgba(255, 255, 255, 0.2);
+      border: 3px solid rgba(255, 215, 0, 0.8);
       transform: translate(-50%, -50%);
       z-index: 2;
     }
     .hole:active {
-      background: rgba(212, 178, 111, 0.7);
-      box-shadow: 0 0 12px #d4b26f;
+      background: rgba(255, 215, 0, 0.7);
+      box-shadow: 0 0 15px #ffd700;
     }
 
-    /* Διπλή ζώνη (1 δάχτυλο = 2 τρύπες μαζί) */
+    /* Περιοχή για 1 δάχτυλο = 2 τρύπες μαζί */
     .double-hole-zone {
       position: absolute;
-      width: 120px;
-      height: 60px;
+      width: 130px;
+      height: 65px;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 30px;
     }
   </style>
@@ -107,28 +107,29 @@
 </div>
 
 <div class="app-container">
-  <img src="instrument.png" class="instrument-img" alt="Gaita Walnut">
+  <!-- Η φωτογραφία σου -->
+  <img src="instrument.png" class="instrument-img" alt="Gaita">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
-  <div class="hole" style="top: 24.5%; left: 45.5%;" data-base-note="440"></div>
-  <div class="hole" style="top: 35%; left: 45.5%;" data-base-note="494"></div>
-  <div class="hole" style="top: 45.5%; left: 45.5%;" data-base-note="523"></div>
-  <div class="hole" style="top: 56%; left: 45.5%;" data-base-note="587"></div>
-  <div class="hole" style="top: 66.5%; left: 45.5%;" data-base-note="659"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (5 Τρύπες) -->
+  <div class="hole" style="top: 22%; left: 44%;" data-base-note="440"></div>
+  <div class="hole" style="top: 32%; left: 44%;" data-base-note="494"></div>
+  <div class="hole" style="top: 42%; left: 44%;" data-base-note="523"></div>
+  <div class="hole" style="top: 52%; left: 44%;" data-base-note="587"></div>
+  <div class="hole" style="top: 62%; left: 44%;" data-base-note="659"></div>
 
-  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole" style="top: 24.5%; left: 54.5%;" data-base-note="698"></div>
-  <div class="hole" style="top: 35%; left: 54.5%;" data-base-note="784"></div>
-  <div class="hole" style="top: 45.5%; left: 54.5%;" data-base-note="880"></div>
-  <div class="hole" style="top: 56%; left: 54.5%;" data-base-note="987"></div>
-  <div class="hole" style="top: 66.5%; left: 54.5%;" data-base-note="1046"></div>
+  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ (5 Τρύπες) -->
+  <div class="hole" style="top: 22%; left: 56%;" data-base-note="698"></div>
+  <div class="hole" style="top: 32%; left: 56%;" data-base-note="784"></div>
+  <div class="hole" style="top: 42%; left: 56%;" data-base-note="880"></div>
+  <div class="hole" style="top: 52%; left: 56%;" data-base-note="987"></div>
+  <div class="hole" style="top: 62%; left: 56%;" data-base-note="1046"></div>
 
-  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 24.5%;" data-base-notes="440,698"></div>
-  <div class="double-hole-zone" style="top: 35%;" data-base-notes="494,784"></div>
-  <div class="double-hole-zone" style="top: 45.5%;" data-base-notes="523,880"></div>
-  <div class="double-hole-zone" style="top: 56%;" data-base-notes="587,987"></div>
-  <div class="double-hole-zone" style="top: 66.5%;" data-base-notes="659,1046"></div>
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ (1 δάχτυλο = ταυτόχρονα και οι 2 τρύπες) -->
+  <div class="double-hole-zone" style="top: 22%;" data-base-notes="440,698"></div>
+  <div class="double-hole-zone" style="top: 32%;" data-base-notes="494,784"></div>
+  <div class="double-hole-zone" style="top: 42%;" data-base-notes="523,880"></div>
+  <div class="double-hole-zone" style="top: 52%;" data-base-notes="587,987"></div>
+  <div class="double-hole-zone" style="top: 62%;" data-base-notes="659,1046"></div>
 </div>
 
 <script>
