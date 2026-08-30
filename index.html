@@ -26,8 +26,8 @@
     .app-container {
       position: relative;
       width: 100vw;
-      max-width: 400px;
-      height: 90vh;
+      max-width: 450px;
+      height: 95vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -38,32 +38,31 @@
       object-fit: contain;
     }
     
-    /* Größere Löcher für bessere Bedienung */
+    /* Viel größere Löcher für eine einfache Touch-Bedienung */
     .hole {
       position: absolute;
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.25);
-      border: 3px solid rgba(255, 215, 0, 0.8);
+      background: rgba(255, 255, 255, 0.3);
+      border: 3px solid rgba(255, 215, 0, 0.9);
       transform: translate(-50%, -50%);
       z-index: 2;
     }
     .hole:active {
-      background: rgba(255, 215, 0, 0.7);
+      background: rgba(255, 215, 0, 0.85);
     }
 
-    /* Unsichtbare Zone in der Mitte, um BEIDE Löcher gleichzeitig zu spielen */
+    /* Unsichtbare Doppel-Zone in der Mitte für beide Löcher mit 1 Finger */
     .double-hole-zone {
       position: absolute;
-      width: 120px;
-      height: 60px;
+      width: 140px;
+      height: 80px;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
-      /* optional leicht sichtbar zum Testen, sonst transparent */
       background: rgba(255, 255, 255, 0.05);
-      border-radius: 30px;
+      border-radius: 40px;
     }
   </style>
 </head>
@@ -72,26 +71,26 @@
 <div class="app-container">
   <img src="instrument.png" class="instrument-img" alt="Gaita">
 
-  <!-- LINKES ROHR (Einzelne Löcher) -->
-  <div class="hole" style="top: 25%; left: 38%;" data-note="440"></div>
-  <div class="hole" style="top: 35%; left: 38%;" data-note="494"></div>
-  <div class="hole" style="top: 45%; left: 38%;" data-note="523"></div>
-  <div class="hole" style="top: 55%; left: 38%;" data-note="587"></div>
-  <div class="hole" style="top: 65%; left: 38%;" data-note="659"></div>
+  <!-- LINKES ROHR (5 Einzelne Löcher mit mehr Abstand) -->
+  <div class="hole" style="top: 15%; left: 34%;" data-note="440"></div>
+  <div class="hole" style="top: 32.5%; left: 34%;" data-note="494"></div>
+  <div class="hole" style="top: 50%; left: 34%;" data-note="523"></div>
+  <div class="hole" style="top: 67.5%; left: 34%;" data-note="587"></div>
+  <div class="hole" style="top: 85%; left: 34%;" data-note="659"></div>
 
-  <!-- RECHTES ROHR (Einzelne Löcher) -->
-  <div class="hole" style="top: 25%; left: 62%;" data-note="698"></div>
-  <div class="hole" style="top: 35%; left: 62%;" data-note="784"></div>
-  <div class="hole" style="top: 45%; left: 62%;" data-note="880"></div>
-  <div class="hole" style="top: 55%; left: 62%;" data-note="987"></div>
-  <div class="hole" style="top: 65%; left: 62%;" data-note="1046"></div>
+  <!-- RECHTES ROHR (5 Einzelne Löcher mit mehr Abstand) -->
+  <div class="hole" style="top: 15%; left: 66%;" data-note="698"></div>
+  <div class="hole" style="top: 32.5%; left: 66%;" data-note="784"></div>
+  <div class="hole" style="top: 50%; left: 66%;" data-note="880"></div>
+  <div class="hole" style="top: 67.5%; left: 66%;" data-note="987"></div>
+  <div class="hole" style="top: 85%; left: 66%;" data-note="1046"></div>
 
-  <!-- DOPPEL-ZONEN (Greift beide Löcher auf gleicher Höhe ab) -->
-  <div class="double-hole-zone" style="top: 25%;" data-notes="440,698"></div>
-  <div class="double-hole-zone" style="top: 35%;" data-notes="494,784"></div>
-  <div class="double-hole-zone" style="top: 45%;" data-notes="523,880"></div>
-  <div class="double-hole-zone" style="top: 55%;" data-notes="587,987"></div>
-  <div class="double-hole-zone" style="top: 65%;" data-notes="659,1046"></div>
+  <!-- DOPPEL-ZONEN (Beide Löcher gleichzeitig mit einem Finger in der Mitte) -->
+  <div class="double-hole-zone" style="top: 15%;" data-notes="440,698"></div>
+  <div class="double-hole-zone" style="top: 32.5%;" data-notes="494,784"></div>
+  <div class="double-hole-zone" style="top: 50%;" data-notes="523,880"></div>
+  <div class="double-hole-zone" style="top: 67.5%;" data-notes="587,987"></div>
+  <div class="double-hole-zone" style="top: 85%;" data-notes="659,1046"></div>
 </div>
 
 <script>
@@ -119,7 +118,7 @@
     
     const handlePlay = (e) => {
       e.preventDefault();
-      e.stopPropagation(); // Verhindert Auslösen der Doppelzone
+      e.stopPropagation();
       if (audioCtx.state === 'suspended') audioCtx.resume();
       playTone(freq);
     };
@@ -128,7 +127,7 @@
     hole.addEventListener('mousedown', handlePlay);
   });
 
-  // Doppel-Zonen (beide Töne gleichzeitig spielen)
+  // Doppel-Zonen spielen (beide Rohre zusammen)
   document.querySelectorAll('.double-hole-zone').forEach(zone => {
     const freqs = zone.getAttribute('data-notes').split(',').map(Number);
 
