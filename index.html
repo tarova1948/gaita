@@ -428,59 +428,71 @@
   droneBtn.addEventListener('click', toggleDrone);
   droneBtn.addEventListener('touchstart', toggleDrone, { passive: false });
 
-  // Multi-Touch & Correct Sequential Unlocking Logic
+  // Correct Sequential Unlocking Logic
   function handleTouches(e) {
     e.preventDefault();
-    
+    initAudio();
+
     const touchedHoleIds = new Set();
 
-    for (let i = 0; i < e.touches.length; i++) {
-      const touch = e.touches[i];
-      const elem = document.elementFromPoint(touch.clientX, touch.clientY);
+    holes.forEach(hole => {
+      const rect = hole.getBoundingClientRect();
+      const holeX = rect.left + rect.width / 2;
+      const holeY = rect.top + rect.height / 2;
+      const radius = Math.max(rect.width, rect.height) * 0.9;
 
-      if (!elem) continue;
+      for (let i = 0; i < e.touches.length; i++) {
+        const touch = e.touches[i];
+        const distX = touch.clientX - holeX;
+        const distY = touch.clientY - holeY;
+        const distance = Math.sqrt(distX * distX + distY * distY);
 
-      if (elem.classList.contains('hole')) {
-        touchedHoleIds.add(elem.id);
-      } else if (elem.classList.contains('double-hole-zone')) {
-        const targetIds = elem.getAttribute('data-targets').split(',');
-        targetIds.forEach(id => touchedHoleIds.add(id));
-      }
-    }
-
-    // Συνάρτηση εύρεσης ενεργής τρύπας με σωστή διαδοχική σειρά
-    function getValidActiveHole(prefix) {
-      // Η 1η τρύπα παίζει ΠΑΝΤΑ μόλις πατηθεί, ανεξάρτητα από τα άλλα
-      if (!touchedHoleIds.has(`${prefix}1`)) {
-        return null; 
-      }
-
-      let closedCount = 1; // Η 1η είναι κλειστή
-      
-      // Ελέγχουμε τις υπόλοιπες (από τη 2η έως την 5η)
-      for (let i = 2; i <= 5; i++) {
-        if (touchedHoleIds.has(`${prefix}${i}`)) {
-          closedCount++;
-        } else {
-          break; // Σπάει η αλυσίδα στην πρώτη ανοιχτή τρύπα
+        if (distance <= radius) {
+          touchedHoleIds.add(hole.id);
         }
       }
+    });
 
-      // Η ενεργή νότα (ανοιχτή τρύπα που ακούγεται) είναι αμέσως μετά την τελευταία κλειστή
-      const activeIndex = closedCount + 1;
-      if (activeIndex <= 5) {
-        return `${prefix}${activeIndex}`;
+    // Λογική σειράς: Η 1η τρύπα παίζει πάντα ελεύθερα. 
+    // Η 2η παίζει αν είναι πατημένη η 1η, η 3η αν είναι πατημένες 1 και 2 κ.ο.κ.
+    function getValidActiveHoles(prefix) {
+      const activeList = [];
+      
+      // Έλεγχος 1ης τρύπας (παίζει απευθείας αν την πατήσεις)
+      if (touchedHoleIds.has(`${prefix}1`)) {
+        activeList.push(`${prefix}1`);
+        
+        // Έλεγχος 2ης (μόνο αν η 1η είναι πατημένη)
+        if (touchedHoleIds.has(`${prefix}2`)) {
+          activeList.push(`${prefix}2`);
+          
+          // Έλεγχος 3ης (μόνο αν η 2η είναι πατημένη)
+          if (touchedHoleIds.has(`${prefix}3`)) {
+            activeList.push(`${prefix}3`);
+            
+            // Έλεγχος 4ης
+            if (touchedHoleIds.has(`${prefix}4`)) {
+              activeList.push(`${prefix}4`);
+              
+              // Έλεγχος 5ης
+              if (touchedHoleIds.has(`${prefix}5`)) {
+                activeList.push(`${prefix}5`);
+              }
+            }
+          }
+        }
       }
-      return null; // Αν είναι και οι 5 κλειστές, δεν παίζει καμία
+      return activeList;
     }
 
-    const activeLeftHole = getValidActiveHole('l');
-    const activeRightHole = getValidActiveHole('r');
+    const activeLeft = getValidActiveHoles('l');
+    const activeRight = getValidActiveHoles('r');
+    const soundingIds = new Set([...activeLeft, ...activeRight]);
 
     holes.forEach(hole => {
       const id = hole.id;
       const isTouched = touchedHoleIds.has(id);
-      const isSounding = (id === activeLeftHole || id === activeRightHole);
+      const isSounding = soundingIds.has(id);
 
       if (isTouched) {
         hole.classList.add('active');
