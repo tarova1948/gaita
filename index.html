@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="el">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gaita App</title>
+  <title>Gaita / Angeion App</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,8 +14,9 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #1a1a1a;
+      background-color: #121212;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -23,11 +24,41 @@
       color: white;
       font-family: sans-serif;
     }
+
+    /* Top Bar Steuerung */
+    .top-bar {
+      position: absolute;
+      top: 12px;
+      z-index: 10;
+      display: flex;
+      gap: 12px;
+    }
+    .btn {
+      background: rgba(30, 30, 30, 0.9);
+      color: #ffd700;
+      border: 1.5px solid #ffd700;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn.active {
+      background: #ffd700;
+      color: #121212;
+      box-shadow: 0 0 10px #ffd700;
+    }
+
+    /* Main Container */
     .app-container {
       position: relative;
       width: 100vw;
       max-width: 400px;
       height: 90vh;
+      margin-top: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -37,59 +68,193 @@
       width: auto;
       object-fit: contain;
     }
+    
+    /* Dynamische Löcher */
     .hole {
       position: absolute;
       width: 44px;
       height: 44px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.25);
-      border: 2px solid rgba(255, 215, 0, 0.8);
+      border: 2px solid rgba(255, 215, 0, 0.85);
       transform: translate(-50%, -50%);
+      z-index: 2;
+      transition: background 0.1s;
     }
-    .hole:active {
-      background: rgba(255, 215, 0, 0.7);
+    .hole.active {
+      background: rgba(255, 215, 0, 0.85);
+      box-shadow: 0 0 12px #ffd700;
+    }
+
+    /* Doppel-Zonen */
+    .double-hole-zone {
+      position: absolute;
+      width: 110px;
+      height: 44px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1;
+      background: transparent;
+    }
+
+    /* Modal / Einstellungen Parathiro */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-content {
+      background: #222;
+      border: 2px solid #ffd700;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 380px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 20px;
+      color: #fff;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+    }
+    .modal-header h3 {
+      margin: 0;
+      color: #ffd700;
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .setting-group {
+      margin-bottom: 18px;
+    }
+    .setting-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin-bottom: 6px;
+      color: #ddd;
+    }
+    .setting-group input[type="range"] {
+      width: 100%;
+      accent-color: #ffd700;
+    }
+    .notes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .note-select-item {
+      display: flex;
+      flex-direction: column;
+      font-size: 12px;
+    }
+    .note-select-item select {
+      background: #333;
+      color: #ffd700;
+      border: 1px solid #ffd700;
+      padding: 4px;
+      border-radius: 6px;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
 
+<div class="top-bar">
+  <button class="btn" id="droneBtn">Bordun: AUS</button>
+  <button class="btn" id="openSettingsBtn">⚙️ Ρυθμίσεις</button>
+</div>
+
 <div class="app-container">
-  <img src="instrument.png" class="instrument-img" alt="Gaita">
+  <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
-  <!-- Links (5 Löcher) -->
-  <div class="hole" style="top: 25%; left: 42%;" data-note="440"></div>
-  <div class="hole" style="top: 35%; left: 42%;" data-note="494"></div>
-  <div class="hole" style="top: 45%; left: 42%;" data-note="523"></div>
-  <div class="hole" style="top: 55%; left: 42%;" data-note="587"></div>
-  <div class="hole" style="top: 65%; left: 42%;" data-note="659"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Traditionell: La, Sol, Fa, Mi, Re - Von oben nach unten) -->
+  <div class="hole" id="hole-l1" style="top: 25%; left: 42%;" data-note="440.00"></div>
+  <div class="hole" id="hole-l2" style="top: 35%; left: 42%;" data-note="392.00"></div>
+  <div class="hole" id="hole-l3" style="top: 45%; left: 42%;" data-note="349.23"></div>
+  <div class="hole" id="hole-l4" style="top: 55%; left: 42%;" data-note="329.63"></div>
+  <div class="hole" id="hole-l5" style="top: 65%; left: 42%;" data-note="293.66"></div>
 
-  <!-- Rechts (5 Löcher) -->
-  <div class="hole" style="top: 25%; left: 58%;" data-note="698"></div>
-  <div class="hole" style="top: 35%; left: 58%;" data-note="784"></div>
-  <div class="hole" style="top: 45%; left: 58%;" data-note="880"></div>
-  <div class="hole" style="top: 55%; left: 58%;" data-note="987"></div>
-  <div class="hole" style="top: 65%; left: 58%;" data-note="1046"></div>
+  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
+  <div class="hole" id="hole-r1" style="top: 25%; left: 58%;" data-note="440.00"></div>
+  <div class="hole" id="hole-r2" style="top: 35%; left: 58%;" data-note="392.00"></div>
+  <div class="hole" id="hole-r3" style="top: 45%; left: 58%;" data-note="349.23"></div>
+  <div class="hole" id="hole-r4" style="top: 55%; left: 58%;" data-note="329.63"></div>
+  <div class="hole" id="hole-r5" style="top: 65%; left: 58%;" data-note="293.66"></div>
+
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
+  <div class="double-hole-zone" style="top: 25%;" data-targets="hole-l1,hole-r1"></div>
+  <div class="double-hole-zone" style="top: 35%;" data-targets="hole-l2,hole-r2"></div>
+  <div class="double-hole-zone" style="top: 45%;" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone" style="top: 55%;" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone" style="top: 65%;" data-targets="hole-l5,hole-r5"></div>
+</div>
+
+<!-- EINSTELLUNGS-PARATHIRO (MODAL) -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Ρυθμίσεις (Einstellungen)</h3>
+      <button class="close-btn" id="closeSettingsBtn">&times;</button>
+    </div>
+
+    <!-- 1. Größe der Löcher -->
+    <div class="setting-group">
+      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">44px</span></label>
+      <input type="range" id="holeSizeSlider" min="30" max="90" value="44">
+    </div>
+
+    <!-- 2. Noten-Auswahl pro Loch -->
+    <div class="setting-group">
+      <label>Ρύθμιση Νότας ανά Τρύπα (Noten-Stimmung):</label>
+      <div class="notes-grid" id="notesGridContainer">
+        <!-- Wird per JS dynamisch generiert -->
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const activeOscillators = new Map();
 
-  document.querySelectorAll('.hole').forEach(hole => {
-    const freq = parseFloat(hole.getAttribute('data-note'));
+  // Verfügbare Ton-Optionen (Hz)
+  const noteOptions = [
+    { label: "Do (C4 - 261.6 Hz)", val: 261.63 },
+    { label: "Re (D4 - 293.7 Hz)", val: 293.66 },
+    { label: "Mi (E4 - 329.6 Hz)", val: 329.63 },
+    { label: "Fa (F4 - 349.2 Hz)", val: 349.23 },
+    { label: "Sol (G4 - 392.0 Hz)", val: 392.00 },
+    { label: "La (A4 - 440.0 Hz)", val: 440.00 },
+    { label: "Si (B4 - 493.9 Hz)", val: 493.88 },
+    { label: "Do High (C5 - 523.3 Hz)", val: 523.25 },
+    { label: "Re High (D5 - 587.3 Hz)", val: 587.33 }
+  ];
 
-    hole.addEventListener('touchstart', (e) => {
-      e.preventDefault();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      playTone(freq);
-    });
+  // Sound Start / Stop
+  function startTone(key, freq) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if (activeOscillators.has(key)) return;
 
-    hole.addEventListener('mousedown', () => {
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      playTone(freq);
-    });
-  });
-
-  function playTone(freq) {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
@@ -100,10 +265,149 @@
     gain.connect(audioCtx.destination);
 
     osc.start();
-    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
-    osc.stop(audioCtx.currentTime + 0.8);
+    gain.gain.setValueAtTime(0, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.04);
+
+    activeOscillators.set(key, { osc, gain });
   }
+
+  function stopTone(key) {
+    if (!activeOscillators.has(key)) return;
+    const { osc, gain } = activeOscillators.get(key);
+    
+    gain.gain.setValueAtTime(gain.gain.value, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+    
+    setTimeout(() => {
+      osc.stop();
+      osc.disconnect();
+    }, 80);
+    
+    activeOscillators.delete(key);
+  }
+
+  // 1. MODAL (EINSTELLUNGS-PARATHIRO) CONTROLS
+  const modal = document.getElementById('settingsModal');
+  document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('open'));
+  document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('open'));
+
+  // 2. LOCHGRÖSSE REGULIEREN
+  const holeSizeSlider = document.getElementById('holeSizeSlider');
+  const sizeValText = document.getElementById('sizeVal');
+  
+  holeSizeSlider.addEventListener('input', (e) => {
+    const newSize = e.target.value + 'px';
+    sizeValText.innerText = newSize;
+    document.querySelectorAll('.hole').forEach(h => {
+      h.style.width = newSize;
+      h.style.height = newSize;
+    });
+    document.querySelectorAll('.double-hole-zone').forEach(z => {
+      z.style.height = newSize;
+    });
+  });
+
+  // 3. DYNAMISCHE NOTEN-MENÜS IN DEN EINSTELLUNGEN ERZEUGEN
+  const notesContainer = document.getElementById('notesGridContainer');
+  const holes = document.querySelectorAll('.hole');
+
+  holes.forEach((hole, idx) => {
+    const holeId = hole.id;
+    const currentFreq = parseFloat(hole.getAttribute('data-note'));
+    
+    const item = document.createElement('div');
+    item.className = 'note-select-item';
+    
+    const label = document.createElement('label');
+    label.innerText = (holeId.includes('-l') ? 'Left ' : 'Right ') + (holeId.slice(-1));
+
+    const select = document.createElement('select');
+    noteOptions.forEach(opt => {
+      const option = document.createElement('option');
+      option.value = opt.val;
+      option.innerText = opt.label;
+      if (Math.abs(opt.val - currentFreq) < 1) option.selected = true;
+      select.appendChild(option);
+    });
+
+    select.addEventListener('change', (e) => {
+      hole.setAttribute('data-note', e.target.value);
+    });
+
+    item.appendChild(label);
+    item.appendChild(select);
+    notesContainer.appendChild(item);
+  });
+
+  // 4. BORDUN / DRONE (Basis-Ton Do C4: 261.63 Hz)
+  let droneActive = false;
+  const droneBtn = document.getElementById('droneBtn');
+  droneBtn.addEventListener('click', () => {
+    droneActive = !droneActive;
+    if (droneActive) {
+      startTone('drone', 261.63);
+      droneBtn.classList.add('active');
+      droneBtn.innerText = 'Bordun: EIN';
+    } else {
+      stopTone('drone');
+      droneBtn.classList.remove('active');
+      droneBtn.innerText = 'Bordun: AUS';
+    }
+  });
+
+  // 5. TOUCH & MOUSE EVENT-HANDLING FOR HOLES
+  holes.forEach(hole => {
+    const id = hole.id;
+    const handleStart = (e) => {
+      e.preventDefault();
+      hole.classList.add('active');
+      startTone(id, parseFloat(hole.getAttribute('data-note')));
+    };
+    const handleEnd = (e) => {
+      e.preventDefault();
+      hole.classList.remove('active');
+      stopTone(id);
+    };
+
+    hole.addEventListener('touchstart', handleStart);
+    hole.addEventListener('touchend', handleEnd);
+    hole.addEventListener('mousedown', handleStart);
+    hole.addEventListener('mouseup', handleEnd);
+    hole.addEventListener('mouseleave', handleEnd);
+  });
+
+  // 6. DOPPEL-ZONEN EVENT-HANDLING («δίπλασμα» Support)
+  document.querySelectorAll('.double-hole-zone').forEach(zone => {
+    const targetIds = zone.getAttribute('data-targets').split(',');
+
+    const handleStartDouble = (e) => {
+      e.preventDefault();
+      targetIds.forEach(id => {
+        const targetHole = document.getElementById(id);
+        if (targetHole) {
+          targetHole.classList.add('active');
+          startTone(id, parseFloat(targetHole.getAttribute('data-note')));
+        }
+      });
+    };
+
+    const handleEndDouble = (e) => {
+      e.preventDefault();
+      targetIds.forEach(id => {
+        const targetHole = document.getElementById(id);
+        if (targetHole) {
+          targetHole.classList.remove('active');
+          stopTone(id);
+        }
+      });
+    };
+
+    zone.addEventListener('touchstart', handleStartDouble);
+    zone.addEventListener('touchend', handleEndDouble);
+    zone.addEventListener('mousedown', handleStartDouble);
+    zone.addEventListener('mouseup', handleEndDouble);
+    zone.addEventListener('mouseleave', handleEndDouble);
+  });
 </script>
 
 </body>
