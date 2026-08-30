@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="el">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gaita App</title>
+  <title>Gaita Walnut App</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,8 +14,9 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #1a1a1a;
+      background-color: #0d0d0d;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
@@ -23,11 +24,41 @@
       color: white;
       font-family: sans-serif;
     }
+    
+    /* Κουρδιστήρι */
+    .tuner-container {
+      position: absolute;
+      top: 12px;
+      width: 88%;
+      max-width: 360px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(20, 10, 5, 0.85);
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #d4b26f;
+    }
+    .tuner-label {
+      font-size: 14px;
+      font-weight: bold;
+      color: #d4b26f;
+      margin-bottom: 5px;
+    }
+    .tuner-slider {
+      width: 100%;
+      height: 6px;
+      accent-color: #d4b26f;
+      cursor: pointer;
+    }
+
     .app-container {
       position: relative;
       width: 100vw;
-      max-width: 450px;
-      height: 95vh;
+      max-width: 400px;
+      height: 85vh;
+      margin-top: 45px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -38,70 +69,89 @@
       object-fit: contain;
     }
     
-    /* Viel größere Löcher für eine einfache Touch-Bedienung */
+    /* Μεγάλες τρύπες ευθυγραμμισμένες με την καρυδιά */
     .hole {
       position: absolute;
-      width: 80px;
-      height: 80px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      border: 3px solid rgba(255, 215, 0, 0.9);
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(212, 178, 111, 0.8);
       transform: translate(-50%, -50%);
       z-index: 2;
     }
     .hole:active {
-      background: rgba(255, 215, 0, 0.85);
+      background: rgba(212, 178, 111, 0.7);
+      box-shadow: 0 0 12px #d4b26f;
     }
 
-    /* Unsichtbare Doppel-Zone in der Mitte für beide Löcher mit 1 Finger */
+    /* Διπλή ζώνη (1 δάχτυλο = 2 τρύπες μαζί) */
     .double-hole-zone {
       position: absolute;
-      width: 140px;
-      height: 80px;
+      width: 120px;
+      height: 60px;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 1;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 40px;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 30px;
     }
   </style>
 </head>
 <body>
 
+<!-- ΚΟΥΡΔΙΣΤΗΡΙ -->
+<div class="tuner-container">
+  <div class="tuner-label" id="tunerDisplay">Κούρδισμα: 440 Hz (Standard)</div>
+  <input type="range" min="400" max="480" value="440" class="tuner-slider" id="tunerSlider">
+</div>
+
 <div class="app-container">
-  <img src="instrument.png" class="instrument-img" alt="Gaita">
+  <img src="instrument.png" class="instrument-img" alt="Gaita Walnut">
 
-  <!-- LINKES ROHR (5 Einzelne Löcher mit mehr Abstand) -->
-  <div class="hole" style="top: 15%; left: 34%;" data-note="440"></div>
-  <div class="hole" style="top: 32.5%; left: 34%;" data-note="494"></div>
-  <div class="hole" style="top: 50%; left: 34%;" data-note="523"></div>
-  <div class="hole" style="top: 67.5%; left: 34%;" data-note="587"></div>
-  <div class="hole" style="top: 85%; left: 34%;" data-note="659"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
+  <div class="hole" style="top: 24.5%; left: 45.5%;" data-base-note="440"></div>
+  <div class="hole" style="top: 35%; left: 45.5%;" data-base-note="494"></div>
+  <div class="hole" style="top: 45.5%; left: 45.5%;" data-base-note="523"></div>
+  <div class="hole" style="top: 56%; left: 45.5%;" data-base-note="587"></div>
+  <div class="hole" style="top: 66.5%; left: 45.5%;" data-base-note="659"></div>
 
-  <!-- RECHTES ROHR (5 Einzelne Löcher mit mehr Abstand) -->
-  <div class="hole" style="top: 15%; left: 66%;" data-note="698"></div>
-  <div class="hole" style="top: 32.5%; left: 66%;" data-note="784"></div>
-  <div class="hole" style="top: 50%; left: 66%;" data-note="880"></div>
-  <div class="hole" style="top: 67.5%; left: 66%;" data-note="987"></div>
-  <div class="hole" style="top: 85%; left: 66%;" data-note="1046"></div>
+  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
+  <div class="hole" style="top: 24.5%; left: 54.5%;" data-base-note="698"></div>
+  <div class="hole" style="top: 35%; left: 54.5%;" data-base-note="784"></div>
+  <div class="hole" style="top: 45.5%; left: 54.5%;" data-base-note="880"></div>
+  <div class="hole" style="top: 56%; left: 54.5%;" data-base-note="987"></div>
+  <div class="hole" style="top: 66.5%; left: 54.5%;" data-base-note="1046"></div>
 
-  <!-- DOPPEL-ZONEN (Beide Löcher gleichzeitig mit einem Finger in der Mitte) -->
-  <div class="double-hole-zone" style="top: 15%;" data-notes="440,698"></div>
-  <div class="double-hole-zone" style="top: 32.5%;" data-notes="494,784"></div>
-  <div class="double-hole-zone" style="top: 50%;" data-notes="523,880"></div>
-  <div class="double-hole-zone" style="top: 67.5%;" data-notes="587,987"></div>
-  <div class="double-hole-zone" style="top: 85%;" data-notes="659,1046"></div>
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
+  <div class="double-hole-zone" style="top: 24.5%;" data-base-notes="440,698"></div>
+  <div class="double-hole-zone" style="top: 35%;" data-base-notes="494,784"></div>
+  <div class="double-hole-zone" style="top: 45.5%;" data-base-notes="523,880"></div>
+  <div class="double-hole-zone" style="top: 56%;" data-base-notes="587,987"></div>
+  <div class="double-hole-zone" style="top: 66.5%;" data-base-notes="659,1046"></div>
 </div>
 
 <script>
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  const tunerSlider = document.getElementById('tunerSlider');
+  const tunerDisplay = document.getElementById('tunerDisplay');
+  let currentPitchFactor = 1.0;
 
-  function playTone(freq) {
+  tunerSlider.addEventListener('input', (e) => {
+    const baseA = parseFloat(e.target.value);
+    currentPitchFactor = baseA / 440;
+    tunerDisplay.innerText = `Κούρδισμα: ${baseA} Hz`;
+  });
+
+  function playTone(baseFreq) {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
 
     osc.type = 'sawtooth';
-    osc.frequency.value = freq;
+    osc.frequency.value = baseFreq * currentPitchFactor;
 
     osc.connect(gain);
     gain.connect(audioCtx.destination);
@@ -112,29 +162,27 @@
     osc.stop(audioCtx.currentTime + 0.8);
   }
 
-  // Einzelne Löcher spielen
+  // Μονές τρύπες
   document.querySelectorAll('.hole').forEach(hole => {
-    const freq = parseFloat(hole.getAttribute('data-note'));
+    const baseFreq = parseFloat(hole.getAttribute('data-base-note'));
     
     const handlePlay = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      playTone(freq);
+      playTone(baseFreq);
     };
 
     hole.addEventListener('touchstart', handlePlay);
     hole.addEventListener('mousedown', handlePlay);
   });
 
-  // Doppel-Zonen spielen (beide Rohre zusammen)
+  // Διπλές ζώνες
   document.querySelectorAll('.double-hole-zone').forEach(zone => {
-    const freqs = zone.getAttribute('data-notes').split(',').map(Number);
+    const baseFreqs = zone.getAttribute('data-base-notes').split(',').map(Number);
 
     const handlePlayDouble = (e) => {
       e.preventDefault();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-      freqs.forEach(f => playTone(f));
+      baseFreqs.forEach(f => playTone(f));
     };
 
     zone.addEventListener('touchstart', handlePlayDouble);
