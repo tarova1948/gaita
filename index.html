@@ -67,6 +67,8 @@
       align-items: center;
       z-index: 10;
     }
+
+    /* Εικόνα Αυλών */
     .instrument-img {
       height: 100%;
       width: auto;
@@ -98,7 +100,7 @@
       transform: translateX(-50%);
     }
     
-    /* Holes Dynamic Base - Διάμετρος 8mm */
+    /* Dynamic Holes Base */
     .hole {
       position: absolute;
       width: 8mm;
@@ -116,30 +118,22 @@
       box-shadow: 0 0 12px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (4mm αριστερά από το κέντρο - 5mm καθαρό κενό) */
+    /* Αριστερός και Δεξιός Αυλός */
     .hole-left {
       left: calc(50% - 4mm - 2.5mm);
     }
-
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (4mm δεξιά από το κέντρο - 5mm καθαρό κενό) */
     .hole-right {
       left: calc(50% + 4mm + 2.5mm);
     }
 
-    /* ΚΑΘΕΤΕΣ ΘΕΣΕΙΣ ΣΕ ΧΙΛΙΟΣΤΑ (Αρχή από 150mm από την κορυφή)
-       1η Σειρά: Base (150mm)
-       2η Σειρά: +32mm  => 182mm
-       3η Σειρά: +70mm  => 252mm (Μεγάλο κενό χεριών)
-       4η Σειρά: +34mm  => 286mm
-       5η Σειρά: +34mm  => 320mm
-    */
+    /* Κακόρυφες Θέσεις */
     .row-1 { top: 150mm; }
     .row-2 { top: 182mm; }
     .row-3 { top: 252mm; }
     .row-4 { top: 286mm; }
     .row-5 { top: 320mm; }
 
-    /* Doppel-Zonen (Διπλές Ζώνες στη μέση για πάτημα και των δύο τρυπών) */
+    /* Διπλές Ζώνες */
     .double-hole-zone {
       position: absolute;
       width: 25mm;
@@ -240,27 +234,23 @@
 </div>
 
 <div class="app-container" id="instrumentContainer">
-  <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
+  <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 600' width='200' height='600'><defs><linearGradient id='wood' x1='0%' y1='0%' x2='100%' y2='0%'><stop offset='0%' stop-color='%233d2312'/><stop offset='30%' stop-color='%23804e27'/><stop offset='50%' stop-color='%23a36a3b'/><stop offset='70%' stop-color='%23804e27'/><stop offset='100%' stop-color='%233d2312'/></linearGradient></defs><rect x='45' y='80' width='50' height='440' rx='18' fill='url(%23wood)' stroke='%2322130a' stroke-width='3'/><rect x='105' y='80' width='50' height='440' rx='18' fill='url(%23wood)' stroke='%2322130a' stroke-width='3'/></svg>" class="instrument-img" alt="Gaita Angeion">
 
-  <!-- ΔΥΝΑΜΙΚΑ ΚΑΛΑΜΙΑ -->
   <div class="reed-pipe left" id="reedLeft"></div>
   <div class="reed-pipe right" id="reedRight"></div>
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Real mm Distances) -->
   <div class="hole hole-left row-1" id="hole-l1" data-note="440.00"></div>
   <div class="hole hole-left row-2" id="hole-l2" data-note="392.00"></div>
   <div class="hole hole-left row-3" id="hole-l3" data-note="349.23"></div>
   <div class="hole hole-left row-4" id="hole-l4" data-note="329.63"></div>
   <div class="hole hole-left row-5" id="hole-l5" data-note="293.66"></div>
 
-  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ (Real mm Distances) -->
   <div class="hole hole-right row-1" id="hole-r1" data-note="440.00"></div>
   <div class="hole hole-right row-2" id="hole-r2" data-note="392.00"></div>
   <div class="hole hole-right row-3" id="hole-r3" data-note="349.23"></div>
   <div class="hole hole-right row-4" id="hole-r4" data-note="329.63"></div>
   <div class="hole hole-right row-5" id="hole-r5" data-note="293.66"></div>
 
-  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
   <div class="double-hole-zone row-1" data-targets="hole-l1,hole-r1"></div>
   <div class="double-hole-zone row-2" data-targets="hole-l2,hole-r2"></div>
   <div class="double-hole-zone row-3" data-targets="hole-l3,hole-r3"></div>
@@ -268,21 +258,18 @@
   <div class="double-hole-zone row-5" data-targets="hole-l5,hole-r5"></div>
 </div>
 
-<!-- MODAL ΡΥΘΜΙΣΕΩΝ -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Ρυθμίσεις (Einstellungen)</h3>
+      <h3>Ρυθμίσεις</h3>
       <button class="close-btn" id="closeSettingsBtn">&times;</button>
     </div>
 
-    <!-- 1. Μέγεθος Τρυπών -->
     <div class="setting-group">
       <label for="holeSizeSlider">Διάμετρος Τρυπών: <span id="sizeVal">8mm</span></label>
       <input type="range" id="holeSizeSlider" min="5" max="15" value="8">
     </div>
 
-    <!-- 2. Επιλογή Νότας -->
     <div class="setting-group">
       <label>Ρύθμιση Νότας ανά Τρύπα:</label>
       <div class="notes-grid" id="notesGridContainer"></div>
@@ -292,204 +279,4 @@
 
 <script>
   let audioCtx = null;
-  const activeOscillators = new Map();
-
-  function initAudio() {
-    if (!audioCtx) {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioCtx.state === 'suspended') {
-      audioCtx.resume();
-    }
-  }
-
-  const noteOptions = [
-    { label: "Do (C4 - 261.6 Hz)", val: 261.63 },
-    { label: "Re (D4 - 293.7 Hz)", val: 293.66 },
-    { label: "Mi (E4 - 329.6 Hz)", val: 329.63 },
-    { label: "Fa (F4 - 349.2 Hz)", val: 349.23 },
-    { label: "Sol (G4 - 392.0 Hz)", val: 392.00 },
-    { label: "La (A4 - 440.0 Hz)", val: 440.00 },
-    { label: "Si (B4 - 493.9 Hz)", val: 493.88 },
-    { label: "Do High (C5 - 523.3 Hz)", val: 523.25 },
-    { label: "Re High (D5 - 587.3 Hz)", val: 587.33 }
-  ];
-
-  function startTone(key, freq) {
-    initAudio();
-    if (activeOscillators.has(key)) return;
-
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sawtooth';
-    osc.frequency.value = freq;
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start();
-    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.04);
-
-    activeOscillators.set(key, { osc, gain });
-  }
-
-  function stopTone(key) {
-    if (!activeOscillators.has(key)) return;
-    const { osc, gain } = activeOscillators.get(key);
-    
-    gain.gain.setValueAtTime(gain.gain.value, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
-    
-    setTimeout(() => {
-      try {
-        osc.stop();
-        osc.disconnect();
-      } catch(e){}
-    }, 80);
-    
-    activeOscillators.delete(key);
-  }
-
-  // Modal Controls
-  const modal = document.getElementById('settingsModal');
-  const openSettingsBtn = document.getElementById('openSettingsBtn');
-  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
-
-  function openModal(e) { if(e) e.preventDefault(); modal.classList.add('open'); }
-  function closeModal(e) { if(e) e.preventDefault(); modal.classList.remove('open'); }
-
-  openSettingsBtn.addEventListener('click', openModal);
-  openSettingsBtn.addEventListener('touchstart', openModal, { passive: false });
-  closeSettingsBtn.addEventListener('click', closeModal);
-  closeSettingsBtn.addEventListener('touchstart', closeModal, { passive: false });
-
-  // Dynamic Hole Size Adjuster (mm) & Auto Reed Scale
-  const holeSizeSlider = document.getElementById('holeSizeSlider');
-  const sizeValText = document.getElementById('sizeVal');
-  
-  holeSizeSlider.addEventListener('input', (e) => {
-    const mmVal = parseInt(e.target.value);
-    const newSize = mmVal + 'mm';
-    const halfHole = (mmVal / 2) + 'mm';
-
-    sizeValText.innerText = newSize;
-    
-    document.querySelectorAll('.hole').forEach(h => {
-      h.style.width = newSize;
-      h.style.height = newSize;
-    });
-
-    const reedWidth = (mmVal + 8) + 'mm';
-    document.querySelectorAll('.reed-pipe').forEach(r => {
-      r.style.width = reedWidth;
-    });
-
-    document.querySelectorAll('.hole-left').forEach(h => {
-      h.style.left = `calc(50% - ${halfHole} - 2.5mm)`;
-    });
-
-    document.querySelectorAll('.hole-right').forEach(h => {
-      h.style.left = `calc(50% + ${halfHole} + 2.5mm)`;
-    });
-  });
-
-  // Dynamic Notes Menu
-  const notesContainer = document.getElementById('notesGridContainer');
-  const holes = document.querySelectorAll('.hole');
-
-  holes.forEach((hole) => {
-    const holeId = hole.id;
-    const currentFreq = parseFloat(hole.getAttribute('data-note'));
-    
-    const item = document.createElement('div');
-    item.className = 'note-select-item';
-    
-    const label = document.createElement('label');
-    label.innerText = (holeId.includes('-l') ? 'Left ' : 'Right ') + (holeId.slice(-1));
-
-    const select = document.createElement('select');
-    noteOptions.forEach(opt => {
-      const option = document.createElement('option');
-      option.value = opt.val;
-      option.innerText = opt.label;
-      if (Math.abs(opt.val - currentFreq) < 1) option.selected = true;
-      select.appendChild(option);
-    });
-
-    select.addEventListener('change', (e) => {
-      hole.setAttribute('data-note', e.target.value);
-    });
-
-    item.appendChild(label);
-    item.appendChild(select);
-    notesContainer.appendChild(item);
-  });
-
-  // Bordun / Drone
-  let droneActive = false;
-  const droneBtn = document.getElementById('droneBtn');
-
-  function toggleDrone(e) {
-    if (e) e.preventDefault();
-    droneActive = !droneActive;
-    if (droneActive) {
-      startTone('drone', 261.63);
-      droneBtn.classList.add('active');
-      droneBtn.innerText = 'Bordun: EIN';
-    } else {
-      stopTone('drone');
-      droneBtn.classList.remove('active');
-      droneBtn.innerText = 'Bordun: AUS';
-    }
-  }
-
-  droneBtn.addEventListener('click', toggleDrone);
-  droneBtn.addEventListener('touchstart', toggleDrone, { passive: false });
-
-  // Multi-Touch Event System
-  function handleTouches(e) {
-    e.preventDefault();
-    
-    const currentActiveKeys = new Set();
-
-    for (let i = 0; i < e.touches.length; i++) {
-      const touch = e.touches[i];
-      const elem = document.elementFromPoint(touch.clientX, touch.clientY);
-
-      if (!elem) continue;
-
-      if (elem.classList.contains('hole')) {
-        currentActiveKeys.add(elem.id);
-      } else if (elem.classList.contains('double-hole-zone')) {
-        const targetIds = elem.getAttribute('data-targets').split(',');
-        targetIds.forEach(id => currentActiveKeys.add(id));
-      }
-    }
-
-    holes.forEach(hole => {
-      const id = hole.id;
-      if (currentActiveKeys.has(id)) {
-        if (!hole.classList.contains('active')) {
-          hole.classList.add('active');
-          startTone(id, parseFloat(hole.getAttribute('data-note')));
-        }
-      } else {
-        if (hole.classList.contains('active')) {
-          hole.classList.remove('active');
-          stopTone(id);
-        }
-      }
-    });
-  }
-
-  const container = document.getElementById('instrumentContainer');
-  container.addEventListener('touchstart', handleTouches, { passive: false });
-  container.addEventListener('touchmove', handleTouches, { passive: false });
-  container.addEventListener('touchend', handleTouches, { passive: false });
-  container.addEventListener('touchcancel', handleTouches, { passive: false });
-</script>
-
-</body>
-</html>
+  const
