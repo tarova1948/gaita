@@ -59,7 +59,7 @@
     .app-container {
       position: relative;
       width: 100vw;
-      max-width: 400px;
+      max-width: 420px;
       height: 90vh;
       margin-top: 30px;
       display: flex;
@@ -77,8 +77,8 @@
     /* Holes Dynamic */
     .hole {
       position: absolute;
-      width: 40px;
-      height: 40px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.25);
       border: 2px solid rgba(255, 215, 0, 0.85);
@@ -92,21 +92,21 @@
       box-shadow: 0 0 12px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Μεγαλύτερη οριζόντια απόσταση: 8mm από το κέντρο) */
+    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Ανετη οριζοντια αποσταση 12mm για το αριστερο χερι) */
     .hole-left {
-      left: calc(50% - 20px - 8mm);
+      left: calc(50% - 19px - 12mm);
     }
 
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Μεγαλύτερη οριζόντια απόσταση: 8mm από το κέντρο) */
+    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Ανετη οριζοντια αποσταση 12mm για το δεξι χερι) */
     .hole-right {
-      left: calc(50% + 20px + 8mm);
+      left: calc(50% + 19px + 12mm);
     }
 
-    /* Doppel-Zonen (Διπλές Ζώνες στη μέση) */
+    /* Doppel-Zonen (Διπλες Ζωνες στη μεση) */
     .double-hole-zone {
       position: absolute;
-      width: 120px;
-      height: 40px;
+      width: 130px;
+      height: 38px;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 15;
@@ -114,7 +114,7 @@
       pointer-events: auto;
     }
 
-    /* Modal / Ρυθμίσεις Parathiro */
+    /* Modal / Ρυθμισεις Parathiro */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -205,26 +205,32 @@
 <div class="app-container" id="instrumentContainer">
   <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Μεγαλύτερη κάθετη απόσταση μεταξύ των ζευγαριών: 18%, 31%, 44%, 57%, 70%) -->
-  <div class="hole hole-left" id="hole-l1" style="top: 18%;" data-note="440.00"></div>
-  <div class="hole hole-left" id="hole-l2" style="top: 31%;" data-note="392.00"></div>
-  <div class="hole hole-left" id="hole-l3" style="top: 44%;" data-note="349.23"></div>
-  <div class="hole hole-left" id="hole-l4" style="top: 57%;" data-note="329.63"></div>
-  <div class="hole hole-left" id="hole-l5" style="top: 70%;" data-note="293.66"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ 
+       1η: 16%
+       2η: 28%  <-- [Μεγαλο κενο αναμεσα στη 2η & 3η τρυπα]
+       3η: 46%
+       4η: 59%
+       5η: 72%
+  -->
+  <div class="hole hole-left" id="hole-l1" style="top: 16%;" data-note="440.00"></div>
+  <div class="hole hole-left" id="hole-l2" style="top: 28%;" data-note="392.00"></div>
+  <div class="hole hole-left" id="hole-l3" style="top: 46%;" data-note="349.23"></div>
+  <div class="hole hole-left" id="hole-l4" style="top: 59%;" data-note="329.63"></div>
+  <div class="hole hole-left" id="hole-l5" style="top: 72%;" data-note="293.66"></div>
 
   <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole hole-right" id="hole-r1" style="top: 18%;" data-note="440.00"></div>
-  <div class="hole hole-right" id="hole-r2" style="top: 31%;" data-note="392.00"></div>
-  <div class="hole hole-right" id="hole-r3" style="top: 44%;" data-note="349.23"></div>
-  <div class="hole hole-right" id="hole-r4" style="top: 57%;" data-note="329.63"></div>
-  <div class="hole hole-right" id="hole-r5" style="top: 70%;" data-note="293.66"></div>
+  <div class="hole hole-right" id="hole-r1" style="top: 16%;" data-note="440.00"></div>
+  <div class="hole hole-right" id="hole-r2" style="top: 28%;" data-note="392.00"></div>
+  <div class="hole hole-right" id="hole-r3" style="top: 46%;" data-note="349.23"></div>
+  <div class="hole hole-right" id="hole-r4" style="top: 59%;" data-note="329.63"></div>
+  <div class="hole hole-right" id="hole-r5" style="top: 72%;" data-note="293.66"></div>
 
   <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 18%;" data-targets="hole-l1,hole-r1"></div>
-  <div class="double-hole-zone" style="top: 31%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 44%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 57%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 70%;" data-targets="hole-l5,hole-r5"></div>
+  <div class="double-hole-zone" style="top: 16%;" data-targets="hole-l1,hole-r1"></div>
+  <div class="double-hole-zone" style="top: 28%;" data-targets="hole-l2,hole-r2"></div>
+  <div class="double-hole-zone" style="top: 46%;" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone" style="top: 59%;" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone" style="top: 72%;" data-targets="hole-l5,hole-r5"></div>
 </div>
 
 <!-- MODAL ΡΥΘΜΙΣΕΩΝ -->
@@ -237,8 +243,8 @@
 
     <!-- 1. Μέγεθος Τρυπών -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">40px</span></label>
-      <input type="range" id="holeSizeSlider" min="25" max="70" value="40">
+      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">38px</span></label>
+      <input type="range" id="holeSizeSlider" min="25" max="70" value="38">
     </div>
 
     <!-- 2. Επιλογή Νότας -->
@@ -341,11 +347,11 @@
     });
 
     document.querySelectorAll('.hole-left').forEach(h => {
-      h.style.left = `calc(50% - ${halfHole} - 8mm)`;
+      h.style.left = `calc(50% - ${halfHole} - 12mm)`;
     });
 
     document.querySelectorAll('.hole-right').forEach(h => {
-      h.style.left = `calc(50% + ${halfHole} + 8mm)`;
+      h.style.left = `calc(50% + ${halfHole} + 12mm)`;
     });
 
     document.querySelectorAll('.double-hole-zone').forEach(z => {
