@@ -27,25 +27,27 @@
 
     /* Top Bar Control */
     .top-bar {
-      position: absolute;
-      top: 10px;
-      z-index: 10;
+      position: fixed;
+      top: 15px;
+      z-index: 999;
       display: flex;
       gap: 12px;
-      touch-action: auto;
+      pointer-events: auto;
     }
     .btn {
-      background: rgba(20, 20, 20, 0.9);
+      background: rgba(20, 20, 20, 0.95);
       color: #ffd700;
       border: 2px solid #ffd700;
-      padding: 8px 16px;
+      padding: 10px 18px;
       border-radius: 20px;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+      pointer-events: auto;
+      touch-action: auto;
     }
-    .btn.active {
+    .btn:active, .btn.active {
       background: #ffd700;
       color: #111;
       box-shadow: 0 0 15px #ffd700;
@@ -57,15 +59,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 15px;
-      margin-top: 50px;
+      gap: 20px;
+      margin-top: 40px;
+      z-index: 10;
     }
 
     /* Σχεδιασμός Καλαμιού */
     .pipe {
       position: relative;
       width: 50px; 
-      height: 80vh;
+      height: 75vh;
       background: linear-gradient(90deg, #5c3a21 0%, #a0683a 35%, #d19558 50%, #a0683a 65%, #5c3a21 100%);
       border-radius: 12px 12px 4px 4px;
       border: 2px solid #3d2312;
@@ -90,17 +93,19 @@
       border-radius: 0 0 50% 50%;
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.8);
       z-index: 1;
+      pointer-events: none;
     }
 
     /* Τρύπες */
     .hole {
-      width: 30px; 
-      height: 30px;
+      width: 32px; 
+      height: 32px;
       border-radius: 50%;
       background: #111;
       border: 2px solid #ffd700;
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.9);
-      z-index: 2;
+      z-index: 20;
+      pointer-events: auto;
       transition: background 0.05s, transform 0.05s;
     }
     .hole.active {
@@ -121,7 +126,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 25px 0 15px 0;
-      z-index: 3;
+      z-index: 15;
       pointer-events: none;
     }
     .double-hole-zone {
@@ -140,7 +145,7 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.9);
-      z-index: 100;
+      z-index: 1000;
       justify-content: center;
       align-items: center;
       touch-action: auto;
@@ -259,8 +264,8 @@
     </div>
 
     <div class="setting-group">
-      <label for="holeSizeSlider">Πλάτος Τρυπών & Καλαμιού: <span id="sizeVal">30px</span></label>
-      <input type="range" id="holeSizeSlider" min="20" max="55" value="30">
+      <label for="holeSizeSlider">Πλάτος Τρυπών & Καλαμιού: <span id="sizeVal">32px</span></label>
+      <input type="range" id="holeSizeSlider" min="20" max="55" value="32">
     </div>
 
     <div class="setting-group">
@@ -271,33 +276,38 @@
 </div>
 
 <script>
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  let audioCtx = null;
   const BASE_FREQ = 293.66; // Re4
 
   let isAirActive = false;
 
-  // Συνθέτης Καλαμιού (Διπλό Reed + Φίλτρο)
+  function initAudio() {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  }
+
+  // Συνθέτης Καλαμιού
   class PipeVoice {
     constructor(ctx) {
       this.ctx = ctx;
 
-      // Κύριοι Ταλαντωτές (Sawtooth + Square)
       this.osc1 = ctx.createOscillator();
       this.osc2 = ctx.createOscillator();
       this.osc1.type = 'sawtooth';
       this.osc2.type = 'square';
 
-      // Ακουστικό Φίλτρο
       this.filter = ctx.createBiquadFilter();
       this.filter.type = 'lowpass';
       this.filter.frequency.value = 1800;
       this.filter.Q.value = 2.5;
 
-      // Master Gain
       this.gain = ctx.createGain();
       this.gain.gain.value = 0;
 
-      // Συνδέσεις
       this.osc1.connect(this.filter);
       this.osc2.connect(this.filter);
       this.filter.connect(this.gain);
@@ -312,19 +322,18 @@
         this.osc2.start();
         this.started = true;
       }
-      this.gain.gain.setTargetAtTime(0.25, this.ctx.currentTime, 0.05);
+      this.gain.gain.setTargetAtTime(0.25, this.ctx.currentTime, 0.03);
     }
 
     stop() {
       if (this.started) {
-        this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
+        this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.03);
       }
     }
 
     setFrequency(freq) {
-      // Φυσικό glissando (γλίστρημα φωνής)
-      this.osc1.frequency.setTargetAtTime(freq, this.ctx.currentTime, 0.04);
-      this.osc2.frequency.setTargetAtTime(freq * 1.002, this.ctx.currentTime, 0.04); // Detune
+      this.osc1.frequency.setTargetAtTime(freq, this.ctx.currentTime, 0.03);
+      this.osc2.frequency.setTargetAtTime(freq * 1.002, this.ctx.currentTime, 0.03);
     }
   }
 
@@ -337,7 +346,7 @@
       this.gain = ctx.createGain();
 
       this.osc.type = 'sawtooth';
-      this.osc.frequency.value = BASE_FREQ / 2; // Μία οκτάβα χαμηλότερα
+      this.osc.frequency.value = BASE_FREQ / 2;
 
       this.filter.type = 'lowpass';
       this.filter.frequency.value = 600;
@@ -356,12 +365,12 @@
         this.osc.start();
         this.started = true;
       }
-      this.gain.gain.setTargetAtTime(0.12, this.ctx.currentTime, 0.08);
+      this.gain.gain.setTargetAtTime(0.12, this.ctx.currentTime, 0.05);
     }
 
     stop() {
       if (this.started) {
-        this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.08);
+        this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
       }
     }
   }
@@ -381,8 +390,9 @@
     { label: "Do High (C5 - 523.3 Hz)", val: 523.25 }
   ];
 
-  function toggleAir() {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
+  function toggleAir(e) {
+    if (e) e.preventDefault();
+    initAudio();
 
     isAirActive = !isAirActive;
     const btn = document.getElementById('startAirBtn');
@@ -410,7 +420,9 @@
     }
   }
 
-  document.getElementById('startAirBtn').addEventListener('click', toggleAir);
+  const startAirBtn = document.getElementById('startAirBtn');
+  startAirBtn.addEventListener('click', toggleAir);
+  startAirBtn.addEventListener('touchstart', toggleAir, { passive: false });
 
   function getPipeFrequency(pipeId) {
     const activeHoles = Array.from(document.querySelectorAll(`#${pipeId} .hole.active`));
@@ -421,7 +433,7 @@
   }
 
   function updatePipesSound() {
-    if (!isAirActive) return;
+    if (!isAirActive || !leftVoice || !rightVoice) return;
 
     const leftFreq = getPipeFrequency('leftPipe');
     const rightFreq = getPipeFrequency('rightPipe');
@@ -430,7 +442,7 @@
     rightVoice.setFrequency(rightFreq);
   }
 
-  // --- Multi-Touch Sliding ---
+  // --- Multi-Touch Handling ---
   const holes = document.querySelectorAll('.hole');
 
   function handleTouches(e) {
@@ -464,8 +476,23 @@
 
   // Ρυθμίσεις Modal
   const modal = document.getElementById('settingsModal');
-  document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('open'));
-  document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('open'));
+  const openSettingsBtn = document.getElementById('openSettingsBtn');
+  const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+
+  function openModal(e) {
+    if (e) e.preventDefault();
+    modal.classList.add('open');
+  }
+  function closeModal(e) {
+    if (e) e.preventDefault();
+    modal.classList.remove('open');
+  }
+
+  openSettingsBtn.addEventListener('click', openModal);
+  openSettingsBtn.addEventListener('touchstart', openModal, { passive: false });
+
+  closeSettingsBtn.addEventListener('click', closeModal);
+  closeSettingsBtn.addEventListener('touchstart', closeModal, { passive: false });
 
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
