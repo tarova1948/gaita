@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gaita / Angeion App</title>
+  <title>Gaita / Angeion App (Real Dimensions)</title>
   <style>
     * {
       box-sizing: border-box;
@@ -74,11 +74,11 @@
       pointer-events: none;
     }
     
-    /* Holes Dynamic */
+    /* Holes Dynamic Base - Διάμετρος 8mm */
     .hole {
       position: absolute;
-      width: 38px;
-      height: 38px;
+      width: 8mm;
+      height: 8mm;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.25);
       border: 2px solid rgba(255, 215, 0, 0.85);
@@ -92,21 +92,34 @@
       box-shadow: 0 0 12px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Μικρότερη οριζόντια απόσταση: 5mm) */
+    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (4mm αριστερά από το κέντρο - 5mm καθαρό κενό) */
     .hole-left {
-      left: calc(50% - 19px - 5mm);
+      left: calc(50% - 4mm - 2.5mm);
     }
 
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Μικρότερη οριζόντια απόσταση: 5mm) */
+    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (4mm δεξιά από το κέντρο - 5mm καθαρό κενό) */
     .hole-right {
-      left: calc(50% + 19px + 5mm);
+      left: calc(50% + 4mm + 2.5mm);
     }
 
-    /* Doppel-Zonen (Διπλές Ζώνες στη μέση) */
+    /* ΚΑΘΕΤΕΣ ΘΕΣΕΙΣ ΣΕ ΧΙΛΙΟΣΤΑ (Αρχή από 150mm από την κορυφή)
+       1η Σειρά: Base (150mm)
+       2η Σειρά: +32mm  => 182mm
+       3η Σειρά: +70mm  => 252mm (Μεγάλο κενό χεριών)
+       4η Σειρά: +34mm  => 286mm
+       5η Σειρά: +34mm  => 320mm
+    */
+    .row-1 { top: 150mm; }
+    .row-2 { top: 182mm; }
+    .row-3 { top: 252mm; }
+    .row-4 { top: 286mm; }
+    .row-5 { top: 320mm; }
+
+    /* Doppel-Zonen (Διπλές Ζώνες στη μέση για πάτημα και των δύο τρυπών) */
     .double-hole-zone {
       position: absolute;
-      width: 100px;
-      height: 38px;
+      width: 25mm;
+      height: 10mm;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 15;
@@ -205,33 +218,26 @@
 <div class="app-container" id="instrumentContainer">
   <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ 
-       Μεγαλύτερες κάθετες αποστάσεις:
-       1η: 12%
-       2η: 28%
-       3η: 48% (μεγαλύτερη απόσταση ανάμεσα σε 2 & 3)
-       4η: 65%
-       5η: 82%
-  -->
-  <div class="hole hole-left" id="hole-l1" style="top: 12%;" data-note="440.00"></div>
-  <div class="hole hole-left" id="hole-l2" style="top: 28%;" data-note="392.00"></div>
-  <div class="hole hole-left" id="hole-l3" style="top: 48%;" data-note="349.23"></div>
-  <div class="hole hole-left" id="hole-l4" style="top: 65%;" data-note="329.63"></div>
-  <div class="hole hole-left" id="hole-l5" style="top: 82%;" data-note="293.66"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Real mm Distances) -->
+  <div class="hole hole-left row-1" id="hole-l1" data-note="440.00"></div>
+  <div class="hole hole-left row-2" id="hole-l2" data-note="392.00"></div>
+  <div class="hole hole-left row-3" id="hole-l3" data-note="349.23"></div>
+  <div class="hole hole-left row-4" id="hole-l4" data-note="329.63"></div>
+  <div class="hole hole-left row-5" id="hole-l5" data-note="293.66"></div>
 
-  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole hole-right" id="hole-r1" style="top: 12%;" data-note="440.00"></div>
-  <div class="hole hole-right" id="hole-r2" style="top: 28%;" data-note="392.00"></div>
-  <div class="hole hole-right" id="hole-r3" style="top: 48%;" data-note="349.23"></div>
-  <div class="hole hole-right" id="hole-r4" style="top: 65%;" data-note="329.63"></div>
-  <div class="hole hole-right" id="hole-r5" style="top: 82%;" data-note="293.66"></div>
+  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ (Real mm Distances) -->
+  <div class="hole hole-right row-1" id="hole-r1" data-note="440.00"></div>
+  <div class="hole hole-right row-2" id="hole-r2" data-note="392.00"></div>
+  <div class="hole hole-right row-3" id="hole-r3" data-note="349.23"></div>
+  <div class="hole hole-right row-4" id="hole-r4" data-note="329.63"></div>
+  <div class="hole hole-right row-5" id="hole-r5" data-note="293.66"></div>
 
   <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 12%;" data-targets="hole-l1,hole-r1"></div>
-  <div class="double-hole-zone" style="top: 28%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 48%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 65%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 82%;" data-targets="hole-l5,hole-r5"></div>
+  <div class="double-hole-zone row-1" data-targets="hole-l1,hole-r1"></div>
+  <div class="double-hole-zone row-2" data-targets="hole-l2,hole-r2"></div>
+  <div class="double-hole-zone row-3" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone row-4" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone row-5" data-targets="hole-l5,hole-r5"></div>
 </div>
 
 <!-- MODAL ΡΥΘΜΙΣΕΩΝ -->
@@ -244,13 +250,13 @@
 
     <!-- 1. Μέγεθος Τρυπών -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">38px</span></label>
-      <input type="range" id="holeSizeSlider" min="25" max="70" value="38">
+      <label for="holeSizeSlider">Διάμετρος Τρυπών: <span id="sizeVal">8mm</span></label>
+      <input type="range" id="holeSizeSlider" min="5" max="15" value="8">
     </div>
 
     <!-- 2. Επιλογή Νότας -->
     <div class="setting-group">
-      <label>Ρύθμιση Νότας ανά Τρύπα (Noten-Stimmung):</label>
+      <label>Ρύθμιση Νότας ανά Τρύπα:</label>
       <div class="notes-grid" id="notesGridContainer"></div>
     </div>
   </div>
@@ -331,14 +337,14 @@
   closeSettingsBtn.addEventListener('click', closeModal);
   closeSettingsBtn.addEventListener('touchstart', closeModal, { passive: false });
 
-  // Dynamic Hole Size Adjuster
+  // Dynamic Hole Size Adjuster (mm)
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
   
   holeSizeSlider.addEventListener('input', (e) => {
-    const holeSizeNum = parseInt(e.target.value);
-    const newSize = holeSizeNum + 'px';
-    const halfHole = (holeSizeNum / 2) + 'px';
+    const mmVal = parseInt(e.target.value);
+    const newSize = mmVal + 'mm';
+    const halfHole = (mmVal / 2) + 'mm';
 
     sizeValText.innerText = newSize;
     
@@ -348,15 +354,11 @@
     });
 
     document.querySelectorAll('.hole-left').forEach(h => {
-      h.style.left = `calc(50% - ${halfHole} - 5mm)`;
+      h.style.left = `calc(50% - ${halfHole} - 2.5mm)`;
     });
 
     document.querySelectorAll('.hole-right').forEach(h => {
-      h.style.left = `calc(50% + ${halfHole} + 5mm)`;
-    });
-
-    document.querySelectorAll('.double-hole-zone').forEach(z => {
-      z.style.height = newSize;
+      h.style.left = `calc(50% + ${halfHole} + 2.5mm)`;
     });
   });
 
