@@ -227,7 +227,7 @@
     <div class="hole" id="hole-l3" data-index="3" data-note="440.00"></div>
     <div class="hole" id="hole-l4" data-index="4" data-note="392.00"></div>
     <div class="hole" id="hole-l5" data-index="5" data-note="349.23"></div>
-    <div class="pipe-outlet"></div> <!-- Έξοδος Αέρα -->
+    <div class="pipe-outlet"></div>
   </div>
 
   <!-- ΔΕΞΙ ΚΑΛΑΜΙ -->
@@ -237,7 +237,7 @@
     <div class="hole" id="hole-r3" data-index="3" data-note="440.00"></div>
     <div class="hole" id="hole-r4" data-index="4" data-note="392.00"></div>
     <div class="hole" id="hole-r5" data-index="5" data-note="349.23"></div>
-    <div class="pipe-outlet"></div> <!-- Έξοδος Αέρα -->
+    <div class="pipe-outlet"></div>
   </div>
 
   <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
@@ -272,11 +272,103 @@
 
 <script>
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const BASE_FREQ = 293.66; 
+  const BASE_FREQ = 293.66; // Re4
 
   let isAirActive = false;
-  let leftPipeOsc = null, leftPipeGain = null;
-  let rightPipeOsc = null, rightPipeGain = null;
+
+  // Συνθέτης Καλαμιού (Διπλό Reed + Φίλτρο)
+  class PipeVoice {
+    constructor(ctx) {
+      this.ctx = ctx;
+
+      // Κύριοι Ταλαντωτές (Sawtooth + Square)
+      this.osc1 = ctx.createOscillator();
+      this.osc2 = ctx.createOscillator();
+      this.osc1.type = 'sawtooth';
+      this.osc2.type = 'square';
+
+      // Ακουστικό Φίλτρο
+      this.filter = ctx.createBiquadFilter();
+      this.filter.type = 'lowpass';
+      this.filter.frequency.value = 1800;
+      this.filter.Q.value = 2.5;
+
+      // Master Gain
+      this.gain = ctx.createGain();
+      this.gain.gain.value = 0;
+
+      // Συνδέσεις
+      this.osc1.connect(this.filter);
+      this.osc2.connect(this.filter);
+      this.filter.connect(this.gain);
+      this.gain.connect(ctx.destination);
+
+      this.started = false;
+    }
+
+    start() {
+      if (!this.started) {
+        this.osc1.start();
+        this.osc2.start();
+        this.started = true;
+      }
+      this.gain.gain.setTargetAtTime(0.25, this.ctx.currentTime, 0.05);
+    }
+
+    stop() {
+      if (this.started) {
+        this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.05);
+      }
+    }
+
+    setFrequency(freq) {
+      // Φυσικό glissando (γλίστρημα φωνής)
+      this.osc1.frequency.setTargetAtTime(freq, this.ctx.currentTime, 0.04);
+      this.osc2.frequency.setTargetAtTime(freq * 1.002, this.ctx.currentTime, 0.04); // Detune
+    }
+  }
+
+  // Συνθέτης Ίσιου (Drone)
+  class DroneVoice {
+    constructor(ctx) {
+      this.ctx = ctx;
+      this.osc = ctx.createOscillator();
+      this.filter = ctx.createBiquadFilter();
+      this.gain = ctx.createGain();
+
+      this.osc.type = 'sawtooth';
+      this.osc.frequency.value = BASE_FREQ / 2; // Μία οκτάβα χαμηλότερα
+
+      this.filter.type = 'lowpass';
+      this.filter.frequency.value = 600;
+
+      this.gain.gain.value = 0;
+
+      this.osc.connect(this.filter);
+      this.filter.connect(this.gain);
+      this.gain.connect(ctx.destination);
+
+      this.started = false;
+    }
+
+    start() {
+      if (!this.started) {
+        this.osc.start();
+        this.started = true;
+      }
+      this.gain.gain.setTargetAtTime(0.12, this.ctx.currentTime, 0.08);
+    }
+
+    stop() {
+      if (this.started) {
+        this.gain.gain.setTargetAtTime(0, this.ctx.currentTime, 0.08);
+      }
+    }
+  }
+
+  let leftVoice = null;
+  let rightVoice = null;
+  let droneVoice = null;
 
   const noteOptions = [
     { label: "Do (C4 - 261.6 Hz)", val: 261.63 },
@@ -299,31 +391,22 @@
       btn.classList.add('active');
       btn.innerText = '💨 Σταμάτημα Αέρα';
 
-      leftPipeOsc = audioCtx.createOscillator();
-      leftPipeGain = audioCtx.createGain();
-      leftPipeOsc.type = 'sawtooth';
-      leftPipeOsc.frequency.value = BASE_FREQ;
-      leftPipeOsc.connect(leftPipeGain);
-      leftPipeGain.connect(audioCtx.destination);
-      leftPipeOsc.start();
-      leftPipeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      if (!leftVoice) leftVoice = new PipeVoice(audioCtx);
+      if (!rightVoice) rightVoice = new PipeVoice(audioCtx);
+      if (!droneVoice) droneVoice = new DroneVoice(audioCtx);
 
-      rightPipeOsc = audioCtx.createOscillator();
-      rightPipeGain = audioCtx.createGain();
-      rightPipeOsc.type = 'sawtooth';
-      rightPipeOsc.frequency.value = BASE_FREQ;
-      rightPipeOsc.connect(rightPipeGain);
-      rightPipeGain.connect(audioCtx.destination);
-      rightPipeOsc.start();
-      rightPipeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      leftVoice.start();
+      rightVoice.start();
+      droneVoice.start();
 
       updatePipesSound();
     } else {
       btn.classList.remove('active');
       btn.innerText = '💨 Άνοιγμα Αέρα (Start)';
-      
-      if (leftPipeOsc) { leftPipeOsc.stop(); leftPipeOsc.disconnect(); }
-      if (rightPipeOsc) { rightPipeOsc.stop(); rightPipeOsc.disconnect(); }
+
+      if (leftVoice) leftVoice.stop();
+      if (rightVoice) rightVoice.stop();
+      if (droneVoice) droneVoice.stop();
     }
   }
 
@@ -343,11 +426,11 @@
     const leftFreq = getPipeFrequency('leftPipe');
     const rightFreq = getPipeFrequency('rightPipe');
 
-    leftPipeOsc.frequency.setValueAtTime(leftFreq, audioCtx.currentTime);
-    rightPipeOsc.frequency.setValueAtTime(rightFreq, audioCtx.currentTime);
+    leftVoice.setFrequency(leftFreq);
+    rightVoice.setFrequency(rightFreq);
   }
 
-  // Multi-Touch Sliding
+  // --- Multi-Touch Sliding ---
   const holes = document.querySelectorAll('.hole');
 
   function handleTouches(e) {
