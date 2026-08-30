@@ -72,6 +72,30 @@
       width: auto;
       object-fit: contain;
       pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Dynamic Wooden Reeds / Καλάμια */
+    .reed-pipe {
+      position: absolute;
+      width: 16mm;
+      background: linear-gradient(90deg, #5c3a21 0%, #a0683a 30%, #c48b55 50%, #a0683a 70%, #5c3a21 100%);
+      border: 2px solid #3d2312;
+      border-radius: 10px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.5);
+      z-index: 5;
+      pointer-events: none;
+      top: calc(150mm - 8mm);
+      height: calc(320mm - 150mm + 16mm);
+    }
+
+    .reed-pipe.left {
+      left: calc(50% - 4mm - 2.5mm);
+      transform: translateX(-50%);
+    }
+    .reed-pipe.right {
+      left: calc(50% + 4mm + 2.5mm);
+      transform: translateX(-50%);
     }
     
     /* Holes Dynamic Base - Διάμετρος 8mm */
@@ -218,6 +242,10 @@
 <div class="app-container" id="instrumentContainer">
   <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
+  <!-- ΔΥΝΑΜΙΚΑ ΚΑΛΑΜΙΑ -->
+  <div class="reed-pipe left" id="reedLeft"></div>
+  <div class="reed-pipe right" id="reedRight"></div>
+
   <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Real mm Distances) -->
   <div class="hole hole-left row-1" id="hole-l1" data-note="440.00"></div>
   <div class="hole hole-left row-2" id="hole-l2" data-note="392.00"></div>
@@ -337,7 +365,7 @@
   closeSettingsBtn.addEventListener('click', closeModal);
   closeSettingsBtn.addEventListener('touchstart', closeModal, { passive: false });
 
-  // Dynamic Hole Size Adjuster (mm)
+  // Dynamic Hole Size Adjuster (mm) & Auto Reed Scale
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
   
@@ -351,6 +379,11 @@
     document.querySelectorAll('.hole').forEach(h => {
       h.style.width = newSize;
       h.style.height = newSize;
+    });
+
+    const reedWidth = (mmVal + 8) + 'mm';
+    document.querySelectorAll('.reed-pipe').forEach(r => {
+      r.style.width = reedWidth;
     });
 
     document.querySelectorAll('.hole-left').forEach(h => {
