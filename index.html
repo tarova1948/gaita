@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gaita App</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #1a1a1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      color: white;
+      font-family: sans-serif;
+    }
+    .app-container {
+      position: relative;
+      width: 100vw;
+      max-width: 400px;
+      height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .instrument-img {
+      height: 100%;
+      width: auto;
+      object-fit: contain;
+    }
+    .hole {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      border: 2px solid rgba(255, 215, 0, 0.8);
+      transform: translate(-50%, -50%);
+    }
+    .hole:active {
+      background: rgba(255, 215, 0, 0.7);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  <img src="instrument.png" class="instrument-img" alt="Gaita">
+
+  <!-- Links (5 Löcher) -->
+  <div class="hole" style="top: 25%; left: 42%;" data-note="440"></div>
+  <div class="hole" style="top: 35%; left: 42%;" data-note="494"></div>
+  <div class="hole" style="top: 45%; left: 42%;" data-note="523"></div>
+  <div class="hole" style="top: 55%; left: 42%;" data-note="587"></div>
+  <div class="hole" style="top: 65%; left: 42%;" data-note="659"></div>
+
+  <!-- Rechts (5 Löcher) -->
+  <div class="hole" style="top: 25%; left: 58%;" data-note="698"></div>
+  <div class="hole" style="top: 35%; left: 58%;" data-note="784"></div>
+  <div class="hole" style="top: 45%; left: 58%;" data-note="880"></div>
+  <div class="hole" style="top: 55%; left: 58%;" data-note="987"></div>
+  <div class="hole" style="top: 65%; left: 58%;" data-note="1046"></div>
+</div>
+
+<script>
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  document.querySelectorAll('.hole').forEach(hole => {
+    const freq = parseFloat(hole.getAttribute('data-note'));
+
+    hole.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      playTone(freq);
+    });
+
+    hole.addEventListener('mousedown', () => {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      playTone(freq);
+    });
+  });
+
+  function playTone(freq) {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start();
+    gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.8);
+    osc.stop(audioCtx.currentTime + 0.8);
+  }
+</script>
+
+</body>
+</html>
