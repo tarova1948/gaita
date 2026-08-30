@@ -357,7 +357,7 @@
   const notesContainer = document.getElementById('notesGridContainer');
   const holes = document.querySelectorAll('.hole');
 
-  // Αρχικές Νότες από την εικόνα σου
+  // Αρχικές Νότες
   const defaultNotes = {
     'hole-l1': 440.00, // Left 1 -> La (A4)
     'hole-r1': 493.88, // Right 1 -> Si (B4)
@@ -430,11 +430,11 @@
   droneBtn.addEventListener('click', toggleDrone);
   droneBtn.addEventListener('touchstart', toggleDrone, { passive: false });
 
-  // Multi-Touch Event System
+  // Multi-Touch Event System με έλεγχο προτεραιότητας (Highest Hole Pitch Logic)
   function handleTouches(e) {
     e.preventDefault();
     
-    const currentActiveKeys = new Set();
+    const touchedHoleIds = new Set();
 
     for (let i = 0; i < e.touches.length; i++) {
       const touch = e.touches[i];
@@ -443,25 +443,51 @@
       if (!elem) continue;
 
       if (elem.classList.contains('hole')) {
-        currentActiveKeys.add(elem.id);
+        touchedHoleIds.add(elem.id);
       } else if (elem.classList.contains('double-hole-zone')) {
         const targetIds = elem.getAttribute('data-targets').split(',');
-        targetIds.forEach(id => currentActiveKeys.add(id));
+        targetIds.forEach(id => touchedHoleIds.add(id));
       }
     }
 
+    // 1. Βρίσκουμε την πιο πάνω πατημένη τρύπα στον αριστερό αυλό (l1 -> l5)
+    let activeLeftHole = null;
+    for (let i = 1; i <= 5; i++) {
+      const id = `hole-l${i}`;
+      if (touchedHoleIds.has(id)) {
+        activeLeftHole = id;
+        break; // Σταματάει στην 1η (πιο πάνω) τρύπα που βρίσκει!
+      }
+    }
+
+    // 2. Βρίσκουμε την πιο πάνω πατημένη τρύπα στον δεξιό αυλό (r1 -> r5)
+    let activeRightHole = null;
+    for (let i = 1; i <= 5; i++) {
+      const id = `hole-r${i}`;
+      if (touchedHoleIds.has(id)) {
+        activeRightHole = id;
+        break; // Σταματάει στην 1η (πιο πάνω) τρύπα που βρίσκει!
+      }
+    }
+
+    // Ενημερώνουμε την εμφάνιση και τον ήχο για όλες τις τρύπες
     holes.forEach(hole => {
       const id = hole.id;
-      if (currentActiveKeys.has(id)) {
-        if (!hole.classList.contains('active')) {
-          hole.classList.add('active');
-          startTone(id, parseFloat(hole.getAttribute('data-note')));
-        }
+      const isTouched = touchedHoleIds.has(id);
+      const isSounding = (id === activeLeftHole || id === activeRightHole);
+
+      // Οπτικό εφέ (κίτρινο φόντο αν την αγγίζει το δάχτυλο)
+      if (isTouched) {
+        hole.classList.add('active');
       } else {
-        if (hole.classList.contains('active')) {
-          hole.classList.remove('active');
-          stopTone(id);
-        }
+        hole.classList.remove('active');
+      }
+
+      // Παραγωγή ήχου: ΜΟΝΟ αν είναι η 1η πιο πάνω τρύπα του αυλού
+      if (isSounding) {
+        startTone(id, parseFloat(hole.getAttribute('data-note')));
+      } else {
+        stopTone(id);
       }
     });
   }
