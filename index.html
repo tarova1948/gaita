@@ -92,17 +92,17 @@
       box-shadow: 0 0 12px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Μικρότερη οριζόντια απόσταση: 5mm) */
+    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ */
     .hole-left {
       left: calc(50% - 19px - 5mm);
     }
 
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Μικρότερη οριζόντια απόσταση: 5mm) */
+    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ */
     .hole-right {
       left: calc(50% + 19px + 5mm);
     }
 
-    /* Doppel-Zonen (Διπλές Ζώνες στη μέση) */
+    /* Doppel-Zonen */
     .double-hole-zone {
       position: absolute;
       width: 100px;
@@ -205,26 +205,19 @@
 <div class="app-container" id="instrumentContainer">
   <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ 
-       Μεγαλύτερες κάθετες αποστάσεις:
-       1η: 12%
-       2η: 28%
-       3η: 48% (μεγαλύτερη απόσταση ανάμεσα σε 2 & 3)
-       4η: 65%
-       5η: 82%
-  -->
-  <div class="hole hole-left" id="hole-l1" style="top: 12%;" data-note="440.00"></div>
-  <div class="hole hole-left" id="hole-l2" style="top: 28%;" data-note="392.00"></div>
-  <div class="hole hole-left" id="hole-l3" style="top: 48%;" data-note="349.23"></div>
-  <div class="hole hole-left" id="hole-l4" style="top: 65%;" data-note="329.63"></div>
-  <div class="hole hole-left" id="hole-l5" style="top: 82%;" data-note="293.66"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
+  <div class="hole hole-left" id="hole-l1" style="top: 12%;"></div>
+  <div class="hole hole-left" id="hole-l2" style="top: 28%;"></div>
+  <div class="hole hole-left" id="hole-l3" style="top: 48%;"></div>
+  <div class="hole hole-left" id="hole-l4" style="top: 65%;"></div>
+  <div class="hole hole-left" id="hole-l5" style="top: 82%;"></div>
 
   <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole hole-right" id="hole-r1" style="top: 12%;" data-note="440.00"></div>
-  <div class="hole hole-right" id="hole-r2" style="top: 28%;" data-note="392.00"></div>
-  <div class="hole hole-right" id="hole-r3" style="top: 48%;" data-note="349.23"></div>
-  <div class="hole hole-right" id="hole-r4" style="top: 65%;" data-note="329.63"></div>
-  <div class="hole hole-right" id="hole-r5" style="top: 82%;" data-note="293.66"></div>
+  <div class="hole hole-right" id="hole-r1" style="top: 12%;"></div>
+  <div class="hole hole-right" id="hole-r2" style="top: 28%;"></div>
+  <div class="hole hole-right" id="hole-r3" style="top: 48%;"></div>
+  <div class="hole hole-right" id="hole-r4" style="top: 65%;"></div>
+  <div class="hole hole-right" id="hole-r5" style="top: 82%;"></div>
 
   <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
   <div class="double-hole-zone" style="top: 12%;" data-targets="hole-l1,hole-r1"></div>
@@ -360,37 +353,61 @@
     });
   });
 
-  // Dynamic Notes Menu
+  // Dynamic Notes Menu (Στοίχιση Left 1 - Right 1, Left 2 - Right 2...)
   const notesContainer = document.getElementById('notesGridContainer');
   const holes = document.querySelectorAll('.hole');
 
-  holes.forEach((hole) => {
-    const holeId = hole.id;
-    const currentFreq = parseFloat(hole.getAttribute('data-note'));
-    
-    const item = document.createElement('div');
-    item.className = 'note-select-item';
-    
-    const label = document.createElement('label');
-    label.innerText = (holeId.includes('-l') ? 'Left ' : 'Right ') + (holeId.slice(-1));
+  // Αρχικές Νότες από την εικόνα σου
+  const defaultNotes = {
+    'hole-l1': 440.00, // Left 1 -> La (A4)
+    'hole-r1': 493.88, // Right 1 -> Si (B4)
+    'hole-l2': 392.00, // Left 2 -> Sol (G4)
+    'hole-r2': 349.23, // Right 2 -> Fa (F4)
+    'hole-l3': 349.23, // Left 3 -> Fa (F4)
+    'hole-r3': 329.63, // Right 3 -> Mi (E4)
+    'hole-l4': 329.63, // Left 4 -> Mi (E4)
+    'hole-r4': 293.66, // Right 4 -> Re (D4)
+    'hole-l5': 293.66, // Left 5 -> Re (D4)
+    'hole-r5': 261.63  // Right 5 -> Do (C4)
+  };
 
-    const select = document.createElement('select');
-    noteOptions.forEach(opt => {
-      const option = document.createElement('option');
-      option.value = opt.val;
-      option.innerText = opt.label;
-      if (Math.abs(opt.val - currentFreq) < 1) option.selected = true;
-      select.appendChild(option);
-    });
-
-    select.addEventListener('change', (e) => {
-      hole.setAttribute('data-note', e.target.value);
-    });
-
-    item.appendChild(label);
-    item.appendChild(select);
-    notesContainer.appendChild(item);
+  Object.keys(defaultNotes).forEach(id => {
+    const holeEl = document.getElementById(id);
+    if (holeEl) holeEl.setAttribute('data-note', defaultNotes[id]);
   });
+
+  // Δημιουργία των select elements ορισμένων ανά ζεύγος (1 έως 5)
+  for (let i = 1; i <= 5; i++) {
+    const pair = [`hole-l${i}`, `hole-r${i}`];
+    
+    pair.forEach(holeId => {
+      const hole = document.getElementById(holeId);
+      const currentFreq = parseFloat(hole.getAttribute('data-note'));
+      
+      const item = document.createElement('div');
+      item.className = 'note-select-item';
+      
+      const label = document.createElement('label');
+      label.innerText = (holeId.includes('-l') ? `Left ${i}` : `Right ${i}`);
+
+      const select = document.createElement('select');
+      noteOptions.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt.val;
+        option.innerText = opt.label;
+        if (Math.abs(opt.val - currentFreq) < 1) option.selected = true;
+        select.appendChild(option);
+      });
+
+      select.addEventListener('change', (e) => {
+        hole.setAttribute('data-note', e.target.value);
+      });
+
+      item.appendChild(label);
+      item.appendChild(select);
+      notesContainer.appendChild(item);
+    });
+  }
 
   // Bordun / Drone
   let droneActive = false;
