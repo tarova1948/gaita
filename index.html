@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gaita / Angeion App (Real Dimensions & Background)</title>
+  <title>Gaita / Angeion Dynamic Reeds App</title>
   <style>
     * {
       box-sizing: border-box;
@@ -55,7 +55,7 @@
       box-shadow: 0 0 10px #ffd700;
     }
 
-    /* Main Container με την εικόνα από κάτω (Το ξύλο με τα καλάμια) */
+    /* Main Container */
     .app-container {
       position: relative;
       width: 100vw;
@@ -67,42 +67,57 @@
       align-items: center;
       z-index: 10;
     }
-    .instrument-img {
+
+    /* Dynamic Wooden Reeds / Καλάμια που μεγαλώνουν/μικραίνουν */
+    .reed-pipe {
       position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 100%;
-      width: auto;
-      object-fit: contain;
+      width: 16mm;
+      background: linear-gradient(90deg, #5c3a21 0%, #a0683a 30%, #c48b55 50%, #a0683a 70%, #5c3a21 100%);
+      border: 2px solid #3d2312;
+      border-radius: 10px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.5);
+      z-index: 5;
       pointer-events: none;
-      z-index: 1;
+      /* Υπολογισμός ύψους αυτόματα από την 1η έως την 5η τρύπα */
+      top: calc(150mm - 8mm);
+      height: calc(320mm - 150mm + 16mm);
     }
-    
+
+    /* Τοποθέτηση Καλαμιών πίσω από τις τρύπες */
+    .reed-pipe.left {
+      left: calc(50% - 4mm - 2.5mm);
+      transform: translateX(-50%);
+    }
+    .reed-pipe.right {
+      left: calc(50% + 4mm + 2.5mm);
+      transform: translateX(-50%);
+    }
+
     /* Holes Dynamic Base - Διάμετρος 8mm */
     .hole {
       position: absolute;
       width: 8mm;
       height: 8mm;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.25);
-      border: 2px solid rgba(255, 215, 0, 0.85);
+      background: #121212;
+      border: 2px solid rgba(255, 215, 0, 0.9);
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.8);
       transform: translate(-50%, -50%);
       z-index: 20;
       pointer-events: auto;
-      transition: background 0.1s;
+      transition: background 0.1s, transform 0.1s;
     }
     .hole.active {
       background: rgba(255, 215, 0, 0.85);
-      box-shadow: 0 0 12px #ffd700;
+      box-shadow: 0 0 14px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (4mm αριστερά από το κέντρο - 5mm καθαρό κενό) */
+    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ */
     .hole-left {
       left: calc(50% - 4mm - 2.5mm);
     }
 
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (4mm δεξιά από το κέντρο - 5mm καθαρό κενό) */
+    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ */
     .hole-right {
       left: calc(50% + 4mm + 2.5mm);
     }
@@ -215,8 +230,9 @@
 </div>
 
 <div class="app-container" id="instrumentContainer">
-  <!-- ΕΙΚΟΝΑ ΥΠΟΒΑΘΡΟΥ (Το ξύλο με τα καλάμια) -->
-  <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
+  <!-- ΔΥΝΑΜΙΚΑ ΚΑΛΑΜΙΑ (ΞΥΛΟ) -->
+  <div class="reed-pipe left" id="reedLeft"></div>
+  <div class="reed-pipe right" id="reedRight"></div>
 
   <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
   <div class="hole hole-left row-1" id="hole-l1" data-note="440.00"></div>
@@ -337,7 +353,7 @@
   closeSettingsBtn.addEventListener('click', closeModal);
   closeSettingsBtn.addEventListener('touchstart', closeModal, { passive: false });
 
-  // Dynamic Hole Size Adjuster (mm)
+  // Dynamic Hole Size & Reed Pipe Size Adjuster (mm)
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
   
@@ -351,6 +367,12 @@
     document.querySelectorAll('.hole').forEach(h => {
       h.style.width = newSize;
       h.style.height = newSize;
+    });
+
+    // Προσαρμογή πλάτους καλαμιών ανάλογα με το μέγεθος των τρυπών
+    const reedWidth = (mmVal + 8) + 'mm';
+    document.querySelectorAll('.reed-pipe').forEach(r => {
+      r.style.width = reedWidth;
     });
 
     document.querySelectorAll('.hole-left').forEach(h => {
