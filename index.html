@@ -92,20 +92,20 @@
       box-shadow: 0 0 12px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Ανετη οριζοντια αποσταση 12mm για το αριστερο χερι) */
+    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Μικρότερη οριζόντια απόσταση: 5mm) */
     .hole-left {
-      left: calc(50% - 19px - 12mm);
+      left: calc(50% - 19px - 5mm);
     }
 
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Ανετη οριζοντια αποσταση 12mm για το δεξι χερι) */
+    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Μικρότερη οριζόντια απόσταση: 5mm) */
     .hole-right {
-      left: calc(50% + 19px + 12mm);
+      left: calc(50% + 19px + 5mm);
     }
 
-    /* Doppel-Zonen (Διπλες Ζωνες στη μεση) */
+    /* Doppel-Zonen (Διπλές Ζώνες στη μέση) */
     .double-hole-zone {
       position: absolute;
-      width: 130px;
+      width: 100px;
       height: 38px;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -114,7 +114,7 @@
       pointer-events: auto;
     }
 
-    /* Modal / Ρυθμισεις Parathiro */
+    /* Modal / Ρυθμίσεις Παράθυρο */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -206,31 +206,32 @@
   <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
   <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ 
-       1η: 16%
-       2η: 28%  <-- [Μεγαλο κενο αναμεσα στη 2η & 3η τρυπα]
-       3η: 46%
-       4η: 59%
-       5η: 72%
+       Μεγαλύτερες κάθετες αποστάσεις:
+       1η: 12%
+       2η: 28%
+       3η: 48% (μεγαλύτερη απόσταση ανάμεσα σε 2 & 3)
+       4η: 65%
+       5η: 82%
   -->
-  <div class="hole hole-left" id="hole-l1" style="top: 16%;" data-note="440.00"></div>
+  <div class="hole hole-left" id="hole-l1" style="top: 12%;" data-note="440.00"></div>
   <div class="hole hole-left" id="hole-l2" style="top: 28%;" data-note="392.00"></div>
-  <div class="hole hole-left" id="hole-l3" style="top: 46%;" data-note="349.23"></div>
-  <div class="hole hole-left" id="hole-l4" style="top: 59%;" data-note="329.63"></div>
-  <div class="hole hole-left" id="hole-l5" style="top: 72%;" data-note="293.66"></div>
+  <div class="hole hole-left" id="hole-l3" style="top: 48%;" data-note="349.23"></div>
+  <div class="hole hole-left" id="hole-l4" style="top: 65%;" data-note="329.63"></div>
+  <div class="hole hole-left" id="hole-l5" style="top: 82%;" data-note="293.66"></div>
 
   <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole hole-right" id="hole-r1" style="top: 16%;" data-note="440.00"></div>
+  <div class="hole hole-right" id="hole-r1" style="top: 12%;" data-note="440.00"></div>
   <div class="hole hole-right" id="hole-r2" style="top: 28%;" data-note="392.00"></div>
-  <div class="hole hole-right" id="hole-r3" style="top: 46%;" data-note="349.23"></div>
-  <div class="hole hole-right" id="hole-r4" style="top: 59%;" data-note="329.63"></div>
-  <div class="hole hole-right" id="hole-r5" style="top: 72%;" data-note="293.66"></div>
+  <div class="hole hole-right" id="hole-r3" style="top: 48%;" data-note="349.23"></div>
+  <div class="hole hole-right" id="hole-r4" style="top: 65%;" data-note="329.63"></div>
+  <div class="hole hole-right" id="hole-r5" style="top: 82%;" data-note="293.66"></div>
 
   <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 16%;" data-targets="hole-l1,hole-r1"></div>
+  <div class="double-hole-zone" style="top: 12%;" data-targets="hole-l1,hole-r1"></div>
   <div class="double-hole-zone" style="top: 28%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 46%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 59%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 72%;" data-targets="hole-l5,hole-r5"></div>
+  <div class="double-hole-zone" style="top: 48%;" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone" style="top: 65%;" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone" style="top: 82%;" data-targets="hole-l5,hole-r5"></div>
 </div>
 
 <!-- MODAL ΡΥΘΜΙΣΕΩΝ -->
@@ -347,11 +348,11 @@
     });
 
     document.querySelectorAll('.hole-left').forEach(h => {
-      h.style.left = `calc(50% - ${halfHole} - 12mm)`;
+      h.style.left = `calc(50% - ${halfHole} - 5mm)`;
     });
 
     document.querySelectorAll('.hole-right').forEach(h => {
-      h.style.left = `calc(50% + ${halfHole} + 12mm)`;
+      h.style.left = `calc(50% + ${halfHole} + 5mm)`;
     });
 
     document.querySelectorAll('.double-hole-zone').forEach(z => {
