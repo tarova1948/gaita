@@ -14,7 +14,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #0d0d0d;
+      background-color: #050505;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -37,12 +37,12 @@
       background: rgba(20, 20, 20, 0.9);
       color: #ffd700;
       border: 2px solid #ffd700;
-      padding: 10px 18px;
-      border-radius: 25px;
-      font-size: 15px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     }
     .btn.active {
       background: #ffd700;
@@ -50,13 +50,13 @@
       box-shadow: 0 0 15px #ffd700;
     }
 
-    /* App Container */
+    /* Container για την εικόνα και τις τρύπες */
     .app-container {
       position: relative;
       width: 100vw;
-      max-width: 450px;
+      max-width: 420px;
       height: 90vh;
-      margin-top: 30px;
+      margin-top: 35px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -67,35 +67,36 @@
       object-fit: contain;
     }
     
-    /* Dynamic Holes */
+    /* Τρύπες (Μικρές & Ακριβείς) */
     .hole {
       position: absolute;
-      width: 32px;
-      height: 32px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.6);
-      border: 2px solid rgba(255, 215, 0, 0.85);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid #ffd700;
       transform: translate(-50%, -50%);
       z-index: 2;
-      transition: background 0.05s;
+      transition: background 0.05s, transform 0.05s;
     }
     .hole.active {
-      background: rgba(255, 215, 0, 0.9);
-      box-shadow: 0 0 15px #ffd700;
+      background: #ffd700;
+      box-shadow: 0 0 12px #ffd700;
+      transform: translate(-50%, -50%) scale(1.2);
     }
 
-    /* Double Zones */
+    /* Διπλές Ζώνες (Πάτημα στη μέση) */
     .double-hole-zone {
       position: absolute;
-      width: 90px;
-      height: 32px;
-      left: 50.5%;
+      width: 65px;
+      height: 24px;
+      left: 50.4%;
       transform: translate(-50%, -50%);
       z-index: 1;
       background: transparent;
     }
 
-    /* Settings Modal */
+    /* Modal Ρυθμίσεων */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -103,7 +104,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.88);
+      background: rgba(0, 0, 0, 0.9);
       z-index: 100;
       justify-content: center;
       align-items: center;
@@ -183,28 +184,29 @@
 </div>
 
 <div class="app-container">
-  <img src="instrument.png" class="instrument-img" alt="Ποντιακό Αγγείον">
+  <!-- Ενσωματωμένη Εικόνα (Δεν χρειάζεται εξωτερικό αρχείο!) -->
+  <img src="https://i.ibb.co/3ykp3kZ/angeion-bg.jpg" class="instrument-img" alt="Ποντιακό Αγγείον">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Ευθυγραμμισμένος με τα καλάμια της εικόνας) -->
-  <div class="hole" id="hole-l1" style="top: 27.5%; left: 47.8%;" data-note="440.00"></div>
-  <div class="hole" id="hole-l2" style="top: 35.5%; left: 47.8%;" data-note="392.00"></div>
-  <div class="hole" id="hole-l3" style="top: 43.5%; left: 47.8%;" data-note="349.23"></div>
-  <div class="hole" id="hole-l4" style="top: 51.5%; left: 47.8%;" data-note="329.63"></div>
-  <div class="hole" id="hole-l5" style="top: 63.5%; left: 47.8%;" data-note="293.66"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
+  <div class="hole" id="hole-l1" style="top: 27.2%; left: 47.1%;" data-note="440.00"></div>
+  <div class="hole" id="hole-l2" style="top: 35.5%; left: 47.1%;" data-note="392.00"></div>
+  <div class="hole" id="hole-l3" style="top: 43.6%; left: 47.1%;" data-note="349.23"></div>
+  <div class="hole" id="hole-l4" style="top: 50.2%; left: 47.1%;" data-note="329.63"></div>
+  <div class="hole" id="hole-l5" style="top: 62.4%; left: 47.1%;" data-note="293.66"></div>
 
   <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole" id="hole-r1" style="top: 27.5%; left: 53.2%;" data-note="440.00"></div>
-  <div class="hole" id="hole-r2" style="top: 35.5%; left: 53.2%;" data-note="392.00"></div>
-  <div class="hole" id="hole-r3" style="top: 43.5%; left: 53.2%;" data-note="349.23"></div>
-  <div class="hole" id="hole-r4" style="top: 51.5%; left: 53.2%;" data-note="329.63"></div>
-  <div class="hole" id="hole-r5" style="top: 63.5%; left: 53.2%;" data-note="293.66"></div>
+  <div class="hole" id="hole-r1" style="top: 27.2%; left: 53.7%;" data-note="440.00"></div>
+  <div class="hole" id="hole-r2" style="top: 35.5%; left: 53.7%;" data-note="392.00"></div>
+  <div class="hole" id="hole-r3" style="top: 43.6%; left: 53.7%;" data-note="349.23"></div>
+  <div class="hole" id="hole-r4" style="top: 50.2%; left: 53.7%;" data-note="329.63"></div>
+  <div class="hole" id="hole-r5" style="top: 62.4%; left: 53.7%;" data-note="293.66"></div>
 
-  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ (Για ταυτόχρονο πάτημα) -->
-  <div class="double-hole-zone" style="top: 27.5%;" data-targets="hole-l1,hole-r1"></div>
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
+  <div class="double-hole-zone" style="top: 27.2%;" data-targets="hole-l1,hole-r1"></div>
   <div class="double-hole-zone" style="top: 35.5%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 43.5%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 51.5%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 63.5%;" data-targets="hole-l5,hole-r5"></div>
+  <div class="double-hole-zone" style="top: 43.6%;" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone" style="top: 50.2%;" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone" style="top: 62.4%;" data-targets="hole-l5,hole-r5"></div>
 </div>
 
 <!-- ΠΑΡΑΘΥΡΟ ΡΥΘΜΙΣΕΩΝ -->
@@ -217,8 +219,8 @@
 
     <!-- Μέγεθος Τρυπών -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών: <span id="sizeVal">32px</span></label>
-      <input type="range" id="holeSizeSlider" min="20" max="60" value="32">
+      <label for="holeSizeSlider">Μέγεθος Τρυπών: <span id="sizeVal">22px</span></label>
+      <input type="range" id="holeSizeSlider" min="15" max="45" value="22">
     </div>
 
     <!-- Επιλογή Νότας ανά Τρύπα -->
@@ -250,7 +252,7 @@
     { label: "Do High (C5 - 523.3 Hz)", val: 523.25 }
   ];
 
-  // Έναρξη ασταμάτητου ήχου (Blowing Air)
+  // Έναρξη ασταμάτητου ήχου αέρα
   function toggleAir() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
 
@@ -292,11 +294,11 @@
 
   document.getElementById('startAirBtn').addEventListener('click', toggleAir);
 
-  // Ενημέρωση συχνότητας κατά το πάτημα των τρυπών
+  // Ενημέρωση ήχου κατά το πάτημα των τρυπών
   function updatePipesSound() {
     if (!isAirActive) return;
 
-    // Βρίσκουμε την ενεργή τρύπα στον Αριστερό Αυλό
+    // Αριστερός Αυλός
     const activeLeft = document.querySelector('.hole[id^="hole-l"].active');
     if (activeLeft) {
       leftPipeOsc.frequency.setValueAtTime(parseFloat(activeLeft.getAttribute('data-note')), audioCtx.currentTime);
@@ -304,7 +306,7 @@
       leftPipeOsc.frequency.setValueAtTime(BASE_FREQ, audioCtx.currentTime);
     }
 
-    // Βρίσκουμε την ενεργή τρύπα στον Δεξιό Αυλό
+    // Δεξιός Αυλός
     const activeRight = document.querySelector('.hole[id^="hole-r"].active');
     if (activeRight) {
       rightPipeOsc.frequency.setValueAtTime(parseFloat(activeRight.getAttribute('data-note')), audioCtx.currentTime);
@@ -313,7 +315,7 @@
     }
   }
 
-  // Event Handlers για Τρύπες
+  // Event Handlers για μεμονωμένες Τρύπες
   const holes = document.querySelectorAll('.hole');
   holes.forEach(hole => {
     const handleStart = (e) => {
@@ -334,7 +336,7 @@
     hole.addEventListener('mouseleave', handleEnd);
   });
 
-  // Event Handlers για Διπλές Ζώνες
+  // Event Handlers για Διπλές Ζώνες (Πάτημα στη μέση)
   document.querySelectorAll('.double-hole-zone').forEach(zone => {
     const targetIds = zone.getAttribute('data-targets').split(',');
 
@@ -372,7 +374,6 @@
       h.style.width = newSize;
       h.style.height = newSize;
     });
-    document.querySelectorAll('.double-hole-zone').forEach(z => z.style.height = newSize);
   });
 
   // Δημιουργία Dropdowns στις Ρυθμίσεις
@@ -409,4 +410,3 @@
 
 </body>
 </html>
-
