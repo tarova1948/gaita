@@ -28,7 +28,7 @@
     /* Top Bar Control */
     .top-bar {
       position: absolute;
-      top: 15px;
+      top: 10px;
       z-index: 10;
       display: flex;
       gap: 12px;
@@ -57,29 +57,29 @@
       justify-content: center;
       align-items: center;
       gap: 15px;
-      margin-top: 40px;
+      margin-top: 50px;
     }
 
-    /* Σχεδιασμός Καλαμιού */
+    /* Σχεδιασμός Καλαμιού με Μεγαλύτερο Ύψος (82vh) */
     .pipe {
       position: relative;
-      width: 50px; /* Αρχικό πλάτος καλαμιού */
-      height: 70vh;
+      width: 50px; 
+      height: 82vh; /* Αυξημένο ύψος για άνεση στα δάχτυλα */
       background: linear-gradient(90deg, #5c3a21 0%, #a0683a 35%, #d19558 50%, #a0683a 65%, #5c3a21 100%);
       border-radius: 12px;
       border: 2px solid #3d2312;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.7), 0 5px 15px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
+      justify-content: space-between; /* Μέγιστο άπλωμα τρυπών στο μήκος */
       align-items: center;
-      padding: 20px 0;
+      padding: 25px 0;
       transition: width 0.2s ease;
     }
 
     /* Τρύπες */
     .hole {
-      width: 30px; /* Αρχικό μέγεθος τρύπας */
+      width: 30px; 
       height: 30px;
       border-radius: 50%;
       background: #111;
@@ -89,13 +89,14 @@
       z-index: 2;
       transition: width 0.2s ease, height 0.2s ease, background 0.05s, transform 0.05s;
     }
+    /* Στην εφαρμογή μας: ACTIVE σημαίνει ΑΝΟΙΧΤΗ ΤΡΥΠΑ (πατημένο κουμπί) */
     .hole.active {
       background: #ffd700;
       box-shadow: 0 0 15px #ffd700;
       transform: scale(1.15);
     }
 
-    /* Διπλές Ζώνες (Πάτημα ανάμεσα στα 2 καλάμια) */
+    /* Διπλές Ζώνες */
     .middle-bridge {
       position: absolute;
       top: 0;
@@ -105,14 +106,14 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
-      padding: 20px 0;
+      justify-content: space-between;
+      padding: 25px 0;
       z-index: 3;
       pointer-events: none;
     }
     .double-hole-zone {
       width: 100%;
-      height: 40px;
+      height: 45px;
       pointer-events: auto;
       background: transparent;
     }
@@ -205,25 +206,17 @@
 </div>
 
 <div class="app-container">
-  <!-- ΑΡΙΣΤΕΡΟ ΚΑΛΑΜΙ -->
   <div class="pipe" id="leftPipe">
-    <div class="hole" id="hole-l1" data-note="440.00"></div>
-    <div class="hole" id="hole-l2" data-note="392.00"></div>
-    <div class="hole" id="hole-l3" data-note="349.23"></div>
-    <div class="hole" id="hole-l4" data-note="329.63"></div>
-    <div class="hole" id="hole-l5" data-note="293.66"></div>
-  </div>
+    <div class="hole" id="hole-l1" data-index="1" data-note="523.25"></div> <div class="hole" id="hole-l2" data-index="2" data-note="493.88"></div> <div class="hole" id="hole-l3" data-index="3" data-note="440.00"></div> <div class="hole" id="hole-l4" data-index="4" data-note="392.00"></div> <div class="hole" id="hole-l5" data-index="5" data-note="349.23"></div> </div>
 
-  <!-- ΔΕΞΙ ΚΑΛΑΜΙ -->
   <div class="pipe" id="rightPipe">
-    <div class="hole" id="hole-r1" data-note="440.00"></div>
-    <div class="hole" id="hole-r2" data-note="392.00"></div>
-    <div class="hole" id="hole-r3" data-note="349.23"></div>
-    <div class="hole" id="hole-r4" data-note="329.63"></div>
-    <div class="hole" id="hole-r5" data-note="293.66"></div>
+    <div class="hole" id="hole-r1" data-index="1" data-note="523.25"></div>
+    <div class="hole" id="hole-r2" data-index="2" data-note="493.88"></div>
+    <div class="hole" id="hole-r3" data-index="3" data-note="440.00"></div>
+    <div class="hole" id="hole-r4" data-index="4" data-note="392.00"></div>
+    <div class="hole" id="hole-r5" data-index="5" data-note="349.23"></div>
   </div>
 
-  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ (Για ταυτόχρονο πάτημα στη μέση) -->
   <div class="middle-bridge">
     <div class="double-hole-zone" data-targets="hole-l1,hole-r1"></div>
     <div class="double-hole-zone" data-targets="hole-l2,hole-r2"></div>
@@ -233,7 +226,6 @@
   </div>
 </div>
 
-<!-- ΠΑΡΑΘΥΡΟ ΡΥΘΜΙΣΕΩΝ -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -241,13 +233,11 @@
       <button class="close-btn" id="closeSettingsBtn">&times;</button>
     </div>
 
-    <!-- Μέγεθος Τρυπών & Καλαμιού -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών & Καλαμιού: <span id="sizeVal">30px</span></label>
+      <label for="holeSizeSlider">Πλάτος Τρυπών & Καλαμιού: <span id="sizeVal">30px</span></label>
       <input type="range" id="holeSizeSlider" min="20" max="55" value="30">
     </div>
 
-    <!-- Επιλογή Νότας ανά Τρύπα -->
     <div class="setting-group">
       <label>Κούρδισμα Τρυπών (Νότες):</label>
       <div class="notes-grid" id="notesGridContainer"></div>
@@ -258,8 +248,8 @@
 <script>
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   
-  // Βασική Νότα Αγγείου (Όλες οι τρύπες κλειστές = Ντο / C4)
-  const BASE_FREQ = 261.63; 
+  // Βασική Νότα Αγγείου (Όλες οι τρύπες κλειστές = Re/Do base)
+  const BASE_FREQ = 293.66; 
 
   let isAirActive = false;
   let leftPipeOsc = null, leftPipeGain = null;
@@ -276,7 +266,6 @@
     { label: "Do High (C5 - 523.3 Hz)", val: 523.25 }
   ];
 
-  // Έναρξη ασταμάτητου ήχου αέρα
   function toggleAir() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
 
@@ -287,7 +276,6 @@
       btn.classList.add('active');
       btn.innerText = '💨 Σταμάτημα Αέρα';
 
-      // Αριστερός Αυλός
       leftPipeOsc = audioCtx.createOscillator();
       leftPipeGain = audioCtx.createGain();
       leftPipeOsc.type = 'sawtooth';
@@ -297,7 +285,6 @@
       leftPipeOsc.start();
       leftPipeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
-      // Δεξιός Αυλός
       rightPipeOsc = audioCtx.createOscillator();
       rightPipeGain = audioCtx.createGain();
       rightPipeOsc.type = 'sawtooth';
@@ -307,6 +294,7 @@
       rightPipeOsc.start();
       rightPipeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
+      updatePipesSound();
     } else {
       btn.classList.remove('active');
       btn.innerText = '💨 Άνοιγμα Αέρα (Start)';
@@ -318,72 +306,67 @@
 
   document.getElementById('startAirBtn').addEventListener('click', toggleAir);
 
-  // Ενημέρωση ήχου κατά το πάτημα των τρυπών
+  // Διόρθωση υπολογισμού νότας: Παίρνει τη χαμηλότερη ΑΝΟΙΧΤΗ τρύπα (μεγαλύτερο index)
+  function getPipeFrequency(pipeId) {
+    const activeHoles = Array.from(document.querySelectorAll(`#${pipeId} .hole.active`));
+    if (activeHoles.length === 0) {
+      return BASE_FREQ; // Όλες κλειστές -> Βασική νότα
+    }
+    
+    // Ταξινομούμε κατά data-index φθίνουσα (η πιο κάτω ανοιχτή τρύπα υπερισχύει)
+    activeHoles.sort((a, b) => parseInt(b.getAttribute('data-index')) - parseInt(a.getAttribute('data-index')));
+    return parseFloat(activeHoles[0].getAttribute('data-note'));
+  }
+
   function updatePipesSound() {
     if (!isAirActive) return;
 
-    // Αριστερός Αυλός
-    const activeLeft = document.querySelector('#leftPipe .hole.active');
-    if (activeLeft) {
-      leftPipeOsc.frequency.setValueAtTime(parseFloat(activeLeft.getAttribute('data-note')), audioCtx.currentTime);
-    } else {
-      leftPipeOsc.frequency.setValueAtTime(BASE_FREQ, audioCtx.currentTime);
-    }
+    const leftFreq = getPipeFrequency('leftPipe');
+    const rightFreq = getPipeFrequency('rightPipe');
 
-    // Δεξιός Αυλός
-    const activeRight = document.querySelector('#rightPipe .hole.active');
-    if (activeRight) {
-      rightPipeOsc.frequency.setValueAtTime(parseFloat(activeRight.getAttribute('data-note')), audioCtx.currentTime);
-    } else {
-      rightPipeOsc.frequency.setValueAtTime(BASE_FREQ, audioCtx.currentTime);
-    }
+    leftPipeOsc.frequency.setValueAtTime(leftFreq, audioCtx.currentTime);
+    rightPipeOsc.frequency.setValueAtTime(rightFreq, audioCtx.currentTime);
   }
 
-  // Event Handlers για μεμονωμένες Τρύπες
+  // Event Handlers για Τρύπες
   const holes = document.querySelectorAll('.hole');
   holes.forEach(hole => {
-    const handleStart = (e) => {
+    const handleToggle = (e) => {
       e.preventDefault();
-      hole.classList.add('active');
-      updatePipesSound();
-    };
-    const handleEnd = (e) => {
-      e.preventDefault();
-      hole.classList.remove('active');
+      hole.classList.toggle('active');
       updatePipesSound();
     };
 
-    hole.addEventListener('touchstart', handleStart);
-    hole.addEventListener('touchend', handleEnd);
-    hole.addEventListener('mousedown', handleStart);
-    hole.addEventListener('mouseup', handleEnd);
-    hole.addEventListener('mouseleave', handleEnd);
+    hole.addEventListener('touchstart', handleToggle);
+    hole.addEventListener('mousedown', handleToggle);
   });
 
-  // Event Handlers για Διπλές Ζώνες (Πάτημα στη μέση)
+  // Event Handlers για Διπλές Ζώνες
   document.querySelectorAll('.double-hole-zone').forEach(zone => {
     const targetIds = zone.getAttribute('data-targets').split(',');
 
-    const handleStartDouble = (e) => {
+    const handleToggleDouble = (e) => {
       e.preventDefault();
-      targetIds.forEach(id => document.getElementById(id)?.classList.add('active'));
+      const target1 = document.getElementById(targetIds[0]);
+      const target2 = document.getElementById(targetIds[1]);
+
+      const shouldActivate = !(target1.classList.contains('active') && target2.classList.contains('active'));
+
+      if (shouldActivate) {
+        target1.classList.add('active');
+        target2.classList.add('active');
+      } else {
+        target1.classList.remove('active');
+        target2.classList.remove('active');
+      }
       updatePipesSound();
     };
 
-    const handleEndDouble = (e) => {
-      e.preventDefault();
-      targetIds.forEach(id => document.getElementById(id)?.classList.remove('active'));
-      updatePipesSound();
-    };
-
-    zone.addEventListener('touchstart', handleStartDouble);
-    zone.addEventListener('touchend', handleEndDouble);
-    zone.addEventListener('mousedown', handleStartDouble);
-    zone.addEventListener('mouseup', handleEndDouble);
-    zone.addEventListener('mouseleave', handleEndDouble);
+    zone.addEventListener('touchstart', handleToggleDouble);
+    zone.addEventListener('mousedown', handleToggleDouble);
   });
 
-  // Ρυθμίσεις (Modal & Sliders)
+  // Ρυθμίσεις
   const modal = document.getElementById('settingsModal');
   document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('open'));
   document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('open'));
@@ -393,25 +376,22 @@
   const leftPipe = document.getElementById('leftPipe');
   const rightPipe = document.getElementById('rightPipe');
   
-  // Αυτόματη προσαρμογή Καλαμιού & Τρυπών μαζί
   holeSizeSlider.addEventListener('input', (e) => {
     const holeSize = parseInt(e.target.value);
-    const pipeWidth = holeSize + 20; // Το καλάμι είναι πάντα 20px πιο πλατύ από την τρύπα
+    const pipeWidth = holeSize + 20;
 
     sizeValText.innerText = holeSize + 'px';
     
-    // Προσαρμογή τρυπών
     holes.forEach(h => {
       h.style.width = holeSize + 'px';
       h.style.height = holeSize + 'px';
     });
 
-    // Προσαρμογή πλάτους καλαμιών
     leftPipe.style.width = pipeWidth + 'px';
     rightPipe.style.width = pipeWidth + 'px';
   });
 
-  // Δημιουργία Dropdowns στις Ρυθμίσεις
+  // Dropdowns Νότες
   const notesContainer = document.getElementById('notesGridContainer');
   holes.forEach((hole) => {
     const holeId = hole.id;
