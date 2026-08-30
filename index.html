@@ -9,7 +9,7 @@
       box-sizing: border-box;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: manipulation;
+      touch-action: none;
     }
     body {
       margin: 0;
@@ -32,6 +32,7 @@
       z-index: 10;
       display: flex;
       gap: 12px;
+      touch-action: auto;
     }
     .btn {
       background: rgba(20, 20, 20, 0.9);
@@ -60,21 +61,35 @@
       margin-top: 50px;
     }
 
-    /* Σχεδιασμός Καλαμιού με Μεγαλύτερο Ύψος (82vh) */
+    /* Σχεδιασμός Καλαμιού */
     .pipe {
       position: relative;
       width: 50px; 
-      height: 82vh; /* Αυξημένο ύψος για άνεση στα δάχτυλα */
+      height: 80vh;
       background: linear-gradient(90deg, #5c3a21 0%, #a0683a 35%, #d19558 50%, #a0683a 65%, #5c3a21 100%);
-      border-radius: 12px;
+      border-radius: 12px 12px 4px 4px;
       border: 2px solid #3d2312;
       box-shadow: inset 0 0 15px rgba(0,0,0,0.7), 0 5px 15px rgba(0,0,0,0.5);
       display: flex;
       flex-direction: column;
-      justify-content: space-between; /* Μέγιστο άπλωμα τρυπών στο μήκος */
+      justify-content: space-between;
       align-items: center;
-      padding: 25px 0;
+      padding: 25px 0 15px 0;
       transition: width 0.2s ease;
+    }
+
+    /* Έξοδος / Στόμιο Καλαμιού (Κάτω Μέρος) */
+    .pipe-outlet {
+      position: absolute;
+      bottom: -12px;
+      width: 80%;
+      height: 12px;
+      background: radial-gradient(ellipse at center, #2b180d 0%, #6e4627 60%, #3d2312 100%);
+      border: 2px solid #a0683a;
+      border-top: none;
+      border-radius: 0 0 50% 50%;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.9), 0 4px 8px rgba(0,0,0,0.8);
+      z-index: 1;
     }
 
     /* Τρύπες */
@@ -85,11 +100,9 @@
       background: #111;
       border: 2px solid #ffd700;
       box-shadow: inset 0 3px 6px rgba(0,0,0,0.9);
-      cursor: pointer;
       z-index: 2;
-      transition: width 0.2s ease, height 0.2s ease, background 0.05s, transform 0.05s;
+      transition: background 0.05s, transform 0.05s;
     }
-    /* Στην εφαρμογή μας: ACTIVE σημαίνει ΑΝΟΙΧΤΗ ΤΡΥΠΑ (πατημένο κουμπί) */
     .hole.active {
       background: #ffd700;
       box-shadow: 0 0 15px #ffd700;
@@ -107,7 +120,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 25px 0;
+      padding: 25px 0 15px 0;
       z-index: 3;
       pointer-events: none;
     }
@@ -130,6 +143,7 @@
       z-index: 100;
       justify-content: center;
       align-items: center;
+      touch-action: auto;
     }
     .modal-overlay.open {
       display: flex;
@@ -205,18 +219,28 @@
   <button class="btn" id="openSettingsBtn">⚙️ Ρυθμίσεις</button>
 </div>
 
-<div class="app-container">
+<div class="app-container" id="instrumentContainer">
+  <!-- ΑΡΙΣΤΕΡΟ ΚΑΛΑΜΙ -->
   <div class="pipe" id="leftPipe">
-    <div class="hole" id="hole-l1" data-index="1" data-note="523.25"></div> <div class="hole" id="hole-l2" data-index="2" data-note="493.88"></div> <div class="hole" id="hole-l3" data-index="3" data-note="440.00"></div> <div class="hole" id="hole-l4" data-index="4" data-note="392.00"></div> <div class="hole" id="hole-l5" data-index="5" data-note="349.23"></div> </div>
+    <div class="hole" id="hole-l1" data-index="1" data-note="523.25"></div>
+    <div class="hole" id="hole-l2" data-index="2" data-note="493.88"></div>
+    <div class="hole" id="hole-l3" data-index="3" data-note="440.00"></div>
+    <div class="hole" id="hole-l4" data-index="4" data-note="392.00"></div>
+    <div class="hole" id="hole-l5" data-index="5" data-note="349.23"></div>
+    <div class="pipe-outlet"></div> <!-- Έξοδος Αέρα -->
+  </div>
 
+  <!-- ΔΕΞΙ ΚΑΛΑΜΙ -->
   <div class="pipe" id="rightPipe">
     <div class="hole" id="hole-r1" data-index="1" data-note="523.25"></div>
     <div class="hole" id="hole-r2" data-index="2" data-note="493.88"></div>
     <div class="hole" id="hole-r3" data-index="3" data-note="440.00"></div>
     <div class="hole" id="hole-r4" data-index="4" data-note="392.00"></div>
     <div class="hole" id="hole-r5" data-index="5" data-note="349.23"></div>
+    <div class="pipe-outlet"></div> <!-- Έξοδος Αέρα -->
   </div>
 
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
   <div class="middle-bridge">
     <div class="double-hole-zone" data-targets="hole-l1,hole-r1"></div>
     <div class="double-hole-zone" data-targets="hole-l2,hole-r2"></div>
@@ -226,6 +250,7 @@
   </div>
 </div>
 
+<!-- ΠΑΡΑΘΥΡΟ ΡΥΘΜΙΣΕΩΝ -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
@@ -247,8 +272,6 @@
 
 <script>
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  
-  // Βασική Νότα Αγγείου (Όλες οι τρύπες κλειστές = Re/Do base)
   const BASE_FREQ = 293.66; 
 
   let isAirActive = false;
@@ -306,14 +329,10 @@
 
   document.getElementById('startAirBtn').addEventListener('click', toggleAir);
 
-  // Διόρθωση υπολογισμού νότας: Παίρνει τη χαμηλότερη ΑΝΟΙΧΤΗ τρύπα (μεγαλύτερο index)
   function getPipeFrequency(pipeId) {
     const activeHoles = Array.from(document.querySelectorAll(`#${pipeId} .hole.active`));
-    if (activeHoles.length === 0) {
-      return BASE_FREQ; // Όλες κλειστές -> Βασική νότα
-    }
+    if (activeHoles.length === 0) return BASE_FREQ;
     
-    // Ταξινομούμε κατά data-index φθίνουσα (η πιο κάτω ανοιχτή τρύπα υπερισχύει)
     activeHoles.sort((a, b) => parseInt(b.getAttribute('data-index')) - parseInt(a.getAttribute('data-index')));
     return parseFloat(activeHoles[0].getAttribute('data-note'));
   }
@@ -328,45 +347,39 @@
     rightPipeOsc.frequency.setValueAtTime(rightFreq, audioCtx.currentTime);
   }
 
-  // Event Handlers για Τρύπες
+  // Multi-Touch Sliding
   const holes = document.querySelectorAll('.hole');
-  holes.forEach(hole => {
-    const handleToggle = (e) => {
-      e.preventDefault();
-      hole.classList.toggle('active');
-      updatePipesSound();
-    };
 
-    hole.addEventListener('touchstart', handleToggle);
-    hole.addEventListener('mousedown', handleToggle);
-  });
+  function handleTouches(e) {
+    e.preventDefault();
+    
+    holes.forEach(h => h.classList.remove('active'));
 
-  // Event Handlers για Διπλές Ζώνες
-  document.querySelectorAll('.double-hole-zone').forEach(zone => {
-    const targetIds = zone.getAttribute('data-targets').split(',');
+    for (let i = 0; i < e.touches.length; i++) {
+      const touch = e.touches[i];
+      const elem = document.elementFromPoint(touch.clientX, touch.clientY);
 
-    const handleToggleDouble = (e) => {
-      e.preventDefault();
-      const target1 = document.getElementById(targetIds[0]);
-      const target2 = document.getElementById(targetIds[1]);
+      if (!elem) continue;
 
-      const shouldActivate = !(target1.classList.contains('active') && target2.classList.contains('active'));
-
-      if (shouldActivate) {
-        target1.classList.add('active');
-        target2.classList.add('active');
-      } else {
-        target1.classList.remove('active');
-        target2.classList.remove('active');
+      if (elem.classList.contains('hole')) {
+        elem.classList.add('active');
+      } else if (elem.classList.contains('double-hole-zone')) {
+        const targetIds = elem.getAttribute('data-targets').split(',');
+        document.getElementById(targetIds[0])?.classList.add('active');
+        document.getElementById(targetIds[1])?.classList.add('active');
       }
-      updatePipesSound();
-    };
+    }
 
-    zone.addEventListener('touchstart', handleToggleDouble);
-    zone.addEventListener('mousedown', handleToggleDouble);
-  });
+    updatePipesSound();
+  }
 
-  // Ρυθμίσεις
+  const container = document.getElementById('instrumentContainer');
+  container.addEventListener('touchstart', handleTouches, { passive: false });
+  container.addEventListener('touchmove', handleTouches, { passive: false });
+  container.addEventListener('touchend', handleTouches, { passive: false });
+  container.addEventListener('touchcancel', handleTouches, { passive: false });
+
+  // Ρυθμίσεις Modal
   const modal = document.getElementById('settingsModal');
   document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('open'));
   document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('open'));
