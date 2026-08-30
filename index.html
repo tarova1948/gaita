@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Gaita / Angeion App</title>
+  <title>Ποντιακό Αγγείον App</title>
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #121212;
+      background-color: #0d0d0d;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -25,38 +25,36 @@
       font-family: sans-serif;
     }
 
-    /* Top Bar Steuerung */
+    /* Top Bar Control */
     .top-bar {
       position: absolute;
-      top: 12px;
+      top: 15px;
       z-index: 10;
       display: flex;
       gap: 12px;
     }
     .btn {
-      background: rgba(30, 30, 30, 0.9);
+      background: rgba(20, 20, 20, 0.9);
       color: #ffd700;
-      border: 1.5px solid #ffd700;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
+      border: 2px solid #ffd700;
+      padding: 10px 18px;
+      border-radius: 25px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     .btn.active {
       background: #ffd700;
-      color: #121212;
-      box-shadow: 0 0 10px #ffd700;
+      color: #111;
+      box-shadow: 0 0 15px #ffd700;
     }
 
-    /* Main Container */
+    /* App Container */
     .app-container {
       position: relative;
       width: 100vw;
-      max-width: 400px;
+      max-width: 450px;
       height: 90vh;
       margin-top: 30px;
       display: flex;
@@ -69,35 +67,35 @@
       object-fit: contain;
     }
     
-    /* Dynamische Löcher */
+    /* Dynamic Holes */
     .hole {
       position: absolute;
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(0, 0, 0, 0.6);
       border: 2px solid rgba(255, 215, 0, 0.85);
       transform: translate(-50%, -50%);
       z-index: 2;
-      transition: background 0.1s;
+      transition: background 0.05s;
     }
     .hole.active {
-      background: rgba(255, 215, 0, 0.85);
-      box-shadow: 0 0 12px #ffd700;
+      background: rgba(255, 215, 0, 0.9);
+      box-shadow: 0 0 15px #ffd700;
     }
 
-    /* Doppel-Zonen */
+    /* Double Zones */
     .double-hole-zone {
       position: absolute;
-      width: 110px;
-      height: 44px;
-      left: 50%;
+      width: 90px;
+      height: 32px;
+      left: 50.5%;
       transform: translate(-50%, -50%);
       z-index: 1;
       background: transparent;
     }
 
-    /* Modal / Einstellungen Parathiro */
+    /* Settings Modal */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -105,7 +103,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.85);
+      background: rgba(0, 0, 0, 0.88);
       z-index: 100;
       justify-content: center;
       align-items: center;
@@ -114,7 +112,7 @@
       display: flex;
     }
     .modal-content {
-      background: #222;
+      background: #1c1c1c;
       border: 2px solid #ffd700;
       border-radius: 16px;
       width: 90%;
@@ -140,7 +138,7 @@
       background: none;
       border: none;
       color: #fff;
-      font-size: 22px;
+      font-size: 24px;
       cursor: pointer;
     }
     .setting-group {
@@ -171,7 +169,7 @@
       background: #333;
       color: #ffd700;
       border: 1px solid #ffd700;
-      padding: 4px;
+      padding: 5px;
       border-radius: 6px;
       margin-top: 4px;
     }
@@ -180,64 +178,67 @@
 <body>
 
 <div class="top-bar">
-  <button class="btn" id="droneBtn">Bordun: AUS</button>
+  <button class="btn" id="startAirBtn">💨 Άνοιγμα Αέρα (Start)</button>
   <button class="btn" id="openSettingsBtn">⚙️ Ρυθμίσεις</button>
 </div>
 
 <div class="app-container">
-  <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
+  <img src="instrument.png" class="instrument-img" alt="Ποντιακό Αγγείον">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Traditionell: La, Sol, Fa, Mi, Re - Von oben nach unten) -->
-  <div class="hole" id="hole-l1" style="top: 25%; left: 42%;" data-note="440.00"></div>
-  <div class="hole" id="hole-l2" style="top: 35%; left: 42%;" data-note="392.00"></div>
-  <div class="hole" id="hole-l3" style="top: 45%; left: 42%;" data-note="349.23"></div>
-  <div class="hole" id="hole-l4" style="top: 55%; left: 42%;" data-note="329.63"></div>
-  <div class="hole" id="hole-l5" style="top: 65%; left: 42%;" data-note="293.66"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Ευθυγραμμισμένος με τα καλάμια της εικόνας) -->
+  <div class="hole" id="hole-l1" style="top: 27.5%; left: 47.8%;" data-note="440.00"></div>
+  <div class="hole" id="hole-l2" style="top: 35.5%; left: 47.8%;" data-note="392.00"></div>
+  <div class="hole" id="hole-l3" style="top: 43.5%; left: 47.8%;" data-note="349.23"></div>
+  <div class="hole" id="hole-l4" style="top: 51.5%; left: 47.8%;" data-note="329.63"></div>
+  <div class="hole" id="hole-l5" style="top: 63.5%; left: 47.8%;" data-note="293.66"></div>
 
   <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole" id="hole-r1" style="top: 25%; left: 58%;" data-note="440.00"></div>
-  <div class="hole" id="hole-r2" style="top: 35%; left: 58%;" data-note="392.00"></div>
-  <div class="hole" id="hole-r3" style="top: 45%; left: 58%;" data-note="349.23"></div>
-  <div class="hole" id="hole-r4" style="top: 55%; left: 58%;" data-note="329.63"></div>
-  <div class="hole" id="hole-r5" style="top: 65%; left: 58%;" data-note="293.66"></div>
+  <div class="hole" id="hole-r1" style="top: 27.5%; left: 53.2%;" data-note="440.00"></div>
+  <div class="hole" id="hole-r2" style="top: 35.5%; left: 53.2%;" data-note="392.00"></div>
+  <div class="hole" id="hole-r3" style="top: 43.5%; left: 53.2%;" data-note="349.23"></div>
+  <div class="hole" id="hole-r4" style="top: 51.5%; left: 53.2%;" data-note="329.63"></div>
+  <div class="hole" id="hole-r5" style="top: 63.5%; left: 53.2%;" data-note="293.66"></div>
 
-  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 25%;" data-targets="hole-l1,hole-r1"></div>
-  <div class="double-hole-zone" style="top: 35%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 45%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 55%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 65%;" data-targets="hole-l5,hole-r5"></div>
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ (Για ταυτόχρονο πάτημα) -->
+  <div class="double-hole-zone" style="top: 27.5%;" data-targets="hole-l1,hole-r1"></div>
+  <div class="double-hole-zone" style="top: 35.5%;" data-targets="hole-l2,hole-r2"></div>
+  <div class="double-hole-zone" style="top: 43.5%;" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone" style="top: 51.5%;" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone" style="top: 63.5%;" data-targets="hole-l5,hole-r5"></div>
 </div>
 
-<!-- EINSTELLUNGS-PARATHIRO (MODAL) -->
+<!-- ΠΑΡΑΘΥΡΟ ΡΥΘΜΙΣΕΩΝ -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal-content">
     <div class="modal-header">
-      <h3>Ρυθμίσεις (Einstellungen)</h3>
+      <h3>Ρυθμίσεις Αγγείου</h3>
       <button class="close-btn" id="closeSettingsBtn">&times;</button>
     </div>
 
-    <!-- 1. Größe der Löcher -->
+    <!-- Μέγεθος Τρυπών -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">44px</span></label>
-      <input type="range" id="holeSizeSlider" min="30" max="90" value="44">
+      <label for="holeSizeSlider">Μέγεθος Τρυπών: <span id="sizeVal">32px</span></label>
+      <input type="range" id="holeSizeSlider" min="20" max="60" value="32">
     </div>
 
-    <!-- 2. Noten-Auswahl pro Loch -->
+    <!-- Επιλογή Νότας ανά Τρύπα -->
     <div class="setting-group">
-      <label>Ρύθμιση Νότας ανά Τρύπα (Noten-Stimmung):</label>
-      <div class="notes-grid" id="notesGridContainer">
-        <!-- Wird per JS dynamisch generiert -->
-      </div>
+      <label>Κούρδισμα Τρυπών (Νότες):</label>
+      <div class="notes-grid" id="notesGridContainer"></div>
     </div>
   </div>
 </div>
 
 <script>
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const activeOscillators = new Map();
+  
+  // Βασική Νότα Αγγείου (Όλες οι τρύπες κλειστές = Ντο / C4)
+  const BASE_FREQ = 261.63; 
 
-  // Verfügbare Ton-Optionen (Hz)
+  let isAirActive = false;
+  let leftPipeOsc = null, leftPipeGain = null;
+  let rightPipeOsc = null, rightPipeGain = null;
+
   const noteOptions = [
     { label: "Do (C4 - 261.6 Hz)", val: 261.63 },
     { label: "Re (D4 - 293.7 Hz)", val: 293.66 },
@@ -246,72 +247,137 @@
     { label: "Sol (G4 - 392.0 Hz)", val: 392.00 },
     { label: "La (A4 - 440.0 Hz)", val: 440.00 },
     { label: "Si (B4 - 493.9 Hz)", val: 493.88 },
-    { label: "Do High (C5 - 523.3 Hz)", val: 523.25 },
-    { label: "Re High (D5 - 587.3 Hz)", val: 587.33 }
+    { label: "Do High (C5 - 523.3 Hz)", val: 523.25 }
   ];
 
-  // Sound Start / Stop
-  function startTone(key, freq) {
+  // Έναρξη ασταμάτητου ήχου (Blowing Air)
+  function toggleAir() {
     if (audioCtx.state === 'suspended') audioCtx.resume();
-    if (activeOscillators.has(key)) return;
 
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
+    isAirActive = !isAirActive;
+    const btn = document.getElementById('startAirBtn');
 
-    osc.type = 'sawtooth';
-    osc.frequency.value = freq;
+    if (isAirActive) {
+      btn.classList.add('active');
+      btn.innerText = '💨 Σταμάτημα Αέρα';
 
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
+      // Αριστερός Αυλός
+      leftPipeOsc = audioCtx.createOscillator();
+      leftPipeGain = audioCtx.createGain();
+      leftPipeOsc.type = 'sawtooth';
+      leftPipeOsc.frequency.value = BASE_FREQ;
+      leftPipeOsc.connect(leftPipeGain);
+      leftPipeGain.connect(audioCtx.destination);
+      leftPipeOsc.start();
+      leftPipeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
-    osc.start();
-    gain.gain.setValueAtTime(0, audioCtx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.04);
+      // Δεξιός Αυλός
+      rightPipeOsc = audioCtx.createOscillator();
+      rightPipeGain = audioCtx.createGain();
+      rightPipeOsc.type = 'sawtooth';
+      rightPipeOsc.frequency.value = BASE_FREQ;
+      rightPipeOsc.connect(rightPipeGain);
+      rightPipeGain.connect(audioCtx.destination);
+      rightPipeOsc.start();
+      rightPipeGain.gain.setValueAtTime(0.2, audioCtx.currentTime);
 
-    activeOscillators.set(key, { osc, gain });
+    } else {
+      btn.classList.remove('active');
+      btn.innerText = '💨 Άνοιγμα Αέρα (Start)';
+      
+      if (leftPipeOsc) { leftPipeOsc.stop(); leftPipeOsc.disconnect(); }
+      if (rightPipeOsc) { rightPipeOsc.stop(); rightPipeOsc.disconnect(); }
+    }
   }
 
-  function stopTone(key) {
-    if (!activeOscillators.has(key)) return;
-    const { osc, gain } = activeOscillators.get(key);
-    
-    gain.gain.setValueAtTime(gain.gain.value, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
-    
-    setTimeout(() => {
-      osc.stop();
-      osc.disconnect();
-    }, 80);
-    
-    activeOscillators.delete(key);
+  document.getElementById('startAirBtn').addEventListener('click', toggleAir);
+
+  // Ενημέρωση συχνότητας κατά το πάτημα των τρυπών
+  function updatePipesSound() {
+    if (!isAirActive) return;
+
+    // Βρίσκουμε την ενεργή τρύπα στον Αριστερό Αυλό
+    const activeLeft = document.querySelector('.hole[id^="hole-l"].active');
+    if (activeLeft) {
+      leftPipeOsc.frequency.setValueAtTime(parseFloat(activeLeft.getAttribute('data-note')), audioCtx.currentTime);
+    } else {
+      leftPipeOsc.frequency.setValueAtTime(BASE_FREQ, audioCtx.currentTime);
+    }
+
+    // Βρίσκουμε την ενεργή τρύπα στον Δεξιό Αυλό
+    const activeRight = document.querySelector('.hole[id^="hole-r"].active');
+    if (activeRight) {
+      rightPipeOsc.frequency.setValueAtTime(parseFloat(activeRight.getAttribute('data-note')), audioCtx.currentTime);
+    } else {
+      rightPipeOsc.frequency.setValueAtTime(BASE_FREQ, audioCtx.currentTime);
+    }
   }
 
-  // 1. MODAL (EINSTELLUNGS-PARATHIRO) CONTROLS
+  // Event Handlers για Τρύπες
+  const holes = document.querySelectorAll('.hole');
+  holes.forEach(hole => {
+    const handleStart = (e) => {
+      e.preventDefault();
+      hole.classList.add('active');
+      updatePipesSound();
+    };
+    const handleEnd = (e) => {
+      e.preventDefault();
+      hole.classList.remove('active');
+      updatePipesSound();
+    };
+
+    hole.addEventListener('touchstart', handleStart);
+    hole.addEventListener('touchend', handleEnd);
+    hole.addEventListener('mousedown', handleStart);
+    hole.addEventListener('mouseup', handleEnd);
+    hole.addEventListener('mouseleave', handleEnd);
+  });
+
+  // Event Handlers για Διπλές Ζώνες
+  document.querySelectorAll('.double-hole-zone').forEach(zone => {
+    const targetIds = zone.getAttribute('data-targets').split(',');
+
+    const handleStartDouble = (e) => {
+      e.preventDefault();
+      targetIds.forEach(id => document.getElementById(id)?.classList.add('active'));
+      updatePipesSound();
+    };
+
+    const handleEndDouble = (e) => {
+      e.preventDefault();
+      targetIds.forEach(id => document.getElementById(id)?.classList.remove('active'));
+      updatePipesSound();
+    };
+
+    zone.addEventListener('touchstart', handleStartDouble);
+    zone.addEventListener('touchend', handleEndDouble);
+    zone.addEventListener('mousedown', handleStartDouble);
+    zone.addEventListener('mouseup', handleEndDouble);
+    zone.addEventListener('mouseleave', handleEndDouble);
+  });
+
+  // Ρυθμίσεις (Modal & Sliders)
   const modal = document.getElementById('settingsModal');
   document.getElementById('openSettingsBtn').addEventListener('click', () => modal.classList.add('open'));
   document.getElementById('closeSettingsBtn').addEventListener('click', () => modal.classList.remove('open'));
 
-  // 2. LOCHGRÖSSE REGULIEREN
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
   
   holeSizeSlider.addEventListener('input', (e) => {
     const newSize = e.target.value + 'px';
     sizeValText.innerText = newSize;
-    document.querySelectorAll('.hole').forEach(h => {
+    holes.forEach(h => {
       h.style.width = newSize;
       h.style.height = newSize;
     });
-    document.querySelectorAll('.double-hole-zone').forEach(z => {
-      z.style.height = newSize;
-    });
+    document.querySelectorAll('.double-hole-zone').forEach(z => z.style.height = newSize);
   });
 
-  // 3. DYNAMISCHE NOTEN-MENÜS IN DEN EINSTELLUNGEN ERZEUGEN
+  // Δημιουργία Dropdowns στις Ρυθμίσεις
   const notesContainer = document.getElementById('notesGridContainer');
-  const holes = document.querySelectorAll('.hole');
-
-  holes.forEach((hole, idx) => {
+  holes.forEach((hole) => {
     const holeId = hole.id;
     const currentFreq = parseFloat(hole.getAttribute('data-note'));
     
@@ -319,7 +385,7 @@
     item.className = 'note-select-item';
     
     const label = document.createElement('label');
-    label.innerText = (holeId.includes('-l') ? 'Left ' : 'Right ') + (holeId.slice(-1));
+    label.innerText = (holeId.includes('-l') ? 'Αριστερά ' : 'Δεξιά ') + (holeId.slice(-1));
 
     const select = document.createElement('select');
     noteOptions.forEach(opt => {
@@ -332,81 +398,12 @@
 
     select.addEventListener('change', (e) => {
       hole.setAttribute('data-note', e.target.value);
+      updatePipesSound();
     });
 
     item.appendChild(label);
     item.appendChild(select);
     notesContainer.appendChild(item);
-  });
-
-  // 4. BORDUN / DRONE (Basis-Ton Do C4: 261.63 Hz)
-  let droneActive = false;
-  const droneBtn = document.getElementById('droneBtn');
-  droneBtn.addEventListener('click', () => {
-    droneActive = !droneActive;
-    if (droneActive) {
-      startTone('drone', 261.63);
-      droneBtn.classList.add('active');
-      droneBtn.innerText = 'Bordun: EIN';
-    } else {
-      stopTone('drone');
-      droneBtn.classList.remove('active');
-      droneBtn.innerText = 'Bordun: AUS';
-    }
-  });
-
-  // 5. TOUCH & MOUSE EVENT-HANDLING FOR HOLES
-  holes.forEach(hole => {
-    const id = hole.id;
-    const handleStart = (e) => {
-      e.preventDefault();
-      hole.classList.add('active');
-      startTone(id, parseFloat(hole.getAttribute('data-note')));
-    };
-    const handleEnd = (e) => {
-      e.preventDefault();
-      hole.classList.remove('active');
-      stopTone(id);
-    };
-
-    hole.addEventListener('touchstart', handleStart);
-    hole.addEventListener('touchend', handleEnd);
-    hole.addEventListener('mousedown', handleStart);
-    hole.addEventListener('mouseup', handleEnd);
-    hole.addEventListener('mouseleave', handleEnd);
-  });
-
-  // 6. DOPPEL-ZONEN EVENT-HANDLING («δίπλασμα» Support)
-  document.querySelectorAll('.double-hole-zone').forEach(zone => {
-    const targetIds = zone.getAttribute('data-targets').split(',');
-
-    const handleStartDouble = (e) => {
-      e.preventDefault();
-      targetIds.forEach(id => {
-        const targetHole = document.getElementById(id);
-        if (targetHole) {
-          targetHole.classList.add('active');
-          startTone(id, parseFloat(targetHole.getAttribute('data-note')));
-        }
-      });
-    };
-
-    const handleEndDouble = (e) => {
-      e.preventDefault();
-      targetIds.forEach(id => {
-        const targetHole = document.getElementById(id);
-        if (targetHole) {
-          targetHole.classList.remove('active');
-          stopTone(id);
-        }
-      });
-    };
-
-    zone.addEventListener('touchstart', handleStartDouble);
-    zone.addEventListener('touchend', handleEndDouble);
-    zone.addEventListener('mousedown', handleStartDouble);
-    zone.addEventListener('mouseup', handleEndDouble);
-    zone.addEventListener('mouseleave', handleEndDouble);
   });
 </script>
 
