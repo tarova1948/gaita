@@ -428,7 +428,7 @@
   droneBtn.addEventListener('click', toggleDrone);
   droneBtn.addEventListener('touchstart', toggleDrone, { passive: false });
 
-  // Multi-Touch & Sequential Locking Logic
+  // Multi-Touch & Correct Sequential Unlocking Logic
   function handleTouches(e) {
     e.preventDefault();
     
@@ -448,25 +448,30 @@
       }
     }
 
-    // Συνάρτηση που ελέγχει τη σειρά κλεισίματος (sequential locking) για έναν αυλό (π.χ. 'l' ή 'r')
+    // Συνάρτηση εύρεσης ενεργής τρύπας με σωστή διαδοχική σειρά
     function getValidActiveHole(prefix) {
-      let closedCount = 0;
+      // Η 1η τρύπα παίζει ΠΑΝΤΑ μόλις πατηθεί, ανεξάρτητα από τα άλλα
+      if (!touchedHoleIds.has(`${prefix}1`)) {
+        return null; 
+      }
+
+      let closedCount = 1; // Η 1η είναι κλειστή
       
-      // Μετράμε πόσες συνεχόμενες τρύπες από την κορυφή (1 έως 5) είναι πατημένες
-      for (let i = 1; i <= 5; i++) {
+      // Ελέγχουμε τις υπόλοιπες (από τη 2η έως την 5η)
+      for (let i = 2; i <= 5; i++) {
         if (touchedHoleIds.has(`${prefix}${i}`)) {
           closedCount++;
         } else {
-          break; // Σπάει η αλυσίδα αν μια ενδιάμεση τρύπα μείνει ανοιχτή!
+          break; // Σπάει η αλυσίδα στην πρώτη ανοιχτή τρύπα
         }
       }
 
-      // Η ενεργή νότα (ανοιχτή τρύπα που παράγει ήχο) είναι ακριβώς κάτω από την τελευταία κλειστή
+      // Η ενεργή νότα (ανοιχτή τρύπα που ακούγεται) είναι αμέσως μετά την τελευταία κλειστή
       const activeIndex = closedCount + 1;
       if (activeIndex <= 5) {
         return `${prefix}${activeIndex}`;
       }
-      return null; // Αν είναι όλες κλειστές, δεν παίζει τίποτα
+      return null; // Αν είναι και οι 5 κλειστές, δεν παίζει καμία
     }
 
     const activeLeftHole = getValidActiveHole('l');
