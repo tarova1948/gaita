@@ -74,11 +74,11 @@
       pointer-events: none;
     }
     
-    /* Dynamic Holes (Με απόσταση 5mm ανάμεσα στα ζευγάρια) */
+    /* Holes Dynamic */
     .hole {
       position: absolute;
-      width: 44px;
-      height: 44px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background: rgba(255, 255, 255, 0.25);
       border: 2px solid rgba(255, 215, 0, 0.85);
@@ -92,21 +92,21 @@
       box-shadow: 0 0 12px #ffd700;
     }
 
-    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (calc 50% - 22px - 2.5mm) */
+    /* ΑΡΙΣΤΕΡΕΣ ΤΡΥΠΕΣ (Μεγαλύτερη οριζόντια απόσταση: 8mm από το κέντρο) */
     .hole-left {
-      left: calc(50% - 22px - 2.5mm);
+      left: calc(50% - 20px - 8mm);
     }
 
-    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (calc 50% + 22px + 2.5mm) */
+    /* ΔΕΞΙΕΣ ΤΡΥΠΕΣ (Μεγαλύτερη οριζόντια απόσταση: 8mm από το κέντρο) */
     .hole-right {
-      left: calc(50% + 22px + 2.5mm);
+      left: calc(50% + 20px + 8mm);
     }
 
     /* Doppel-Zonen (Διπλές Ζώνες στη μέση) */
     .double-hole-zone {
       position: absolute;
-      width: 110px;
-      height: 44px;
+      width: 120px;
+      height: 40px;
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 15;
@@ -114,7 +114,7 @@
       pointer-events: auto;
     }
 
-    /* Modal / Einstellungen Parathiro */
+    /* Modal / Ρυθμίσεις Parathiro */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -205,26 +205,26 @@
 <div class="app-container" id="instrumentContainer">
   <img src="instrument.png" class="instrument-img" alt="Gaita Angeion">
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
-  <div class="hole hole-left" id="hole-l1" style="top: 25%;" data-note="440.00"></div>
-  <div class="hole hole-left" id="hole-l2" style="top: 35%;" data-note="392.00"></div>
-  <div class="hole hole-left" id="hole-l3" style="top: 45%;" data-note="349.23"></div>
-  <div class="hole hole-left" id="hole-l4" style="top: 55%;" data-note="329.63"></div>
-  <div class="hole hole-left" id="hole-l5" style="top: 65%;" data-note="293.66"></div>
+  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ (Μεγαλύτερη κάθετη απόσταση μεταξύ των ζευγαριών: 18%, 31%, 44%, 57%, 70%) -->
+  <div class="hole hole-left" id="hole-l1" style="top: 18%;" data-note="440.00"></div>
+  <div class="hole hole-left" id="hole-l2" style="top: 31%;" data-note="392.00"></div>
+  <div class="hole hole-left" id="hole-l3" style="top: 44%;" data-note="349.23"></div>
+  <div class="hole hole-left" id="hole-l4" style="top: 57%;" data-note="329.63"></div>
+  <div class="hole hole-left" id="hole-l5" style="top: 70%;" data-note="293.66"></div>
 
   <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole hole-right" id="hole-r1" style="top: 25%;" data-note="440.00"></div>
-  <div class="hole hole-right" id="hole-r2" style="top: 35%;" data-note="392.00"></div>
-  <div class="hole hole-right" id="hole-r3" style="top: 45%;" data-note="349.23"></div>
-  <div class="hole hole-right" id="hole-r4" style="top: 55%;" data-note="329.63"></div>
-  <div class="hole hole-right" id="hole-r5" style="top: 65%;" data-note="293.66"></div>
+  <div class="hole hole-right" id="hole-r1" style="top: 18%;" data-note="440.00"></div>
+  <div class="hole hole-right" id="hole-r2" style="top: 31%;" data-note="392.00"></div>
+  <div class="hole hole-right" id="hole-r3" style="top: 44%;" data-note="349.23"></div>
+  <div class="hole hole-right" id="hole-r4" style="top: 57%;" data-note="329.63"></div>
+  <div class="hole hole-right" id="hole-r5" style="top: 70%;" data-note="293.66"></div>
 
   <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 25%;" data-targets="hole-l1,hole-r1"></div>
-  <div class="double-hole-zone" style="top: 35%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 45%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 55%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 65%;" data-targets="hole-l5,hole-r5"></div>
+  <div class="double-hole-zone" style="top: 18%;" data-targets="hole-l1,hole-r1"></div>
+  <div class="double-hole-zone" style="top: 31%;" data-targets="hole-l2,hole-r2"></div>
+  <div class="double-hole-zone" style="top: 44%;" data-targets="hole-l3,hole-r3"></div>
+  <div class="double-hole-zone" style="top: 57%;" data-targets="hole-l4,hole-r4"></div>
+  <div class="double-hole-zone" style="top: 70%;" data-targets="hole-l5,hole-r5"></div>
 </div>
 
 <!-- MODAL ΡΥΘΜΙΣΕΩΝ -->
@@ -235,13 +235,13 @@
       <button class="close-btn" id="closeSettingsBtn">&times;</button>
     </div>
 
-    <!-- 1. Größe der Löcher -->
+    <!-- 1. Μέγεθος Τρυπών -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">44px</span></label>
-      <input type="range" id="holeSizeSlider" min="30" max="90" value="44">
+      <label for="holeSizeSlider">Μέγεθος Τρυπών (Lochgröße): <span id="sizeVal">40px</span></label>
+      <input type="range" id="holeSizeSlider" min="25" max="70" value="40">
     </div>
 
-    <!-- 2. Noten-Auswahl pro Loch -->
+    <!-- 2. Επιλογή Νότας -->
     <div class="setting-group">
       <label>Ρύθμιση Νότας ανά Τρύπα (Noten-Stimmung):</label>
       <div class="notes-grid" id="notesGridContainer"></div>
@@ -324,7 +324,7 @@
   closeSettingsBtn.addEventListener('click', closeModal);
   closeSettingsBtn.addEventListener('touchstart', closeModal, { passive: false });
 
-  // Hole Size & 5mm Spacing Dynamic Adjustment
+  // Dynamic Hole Size Adjuster
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
   
@@ -341,11 +341,11 @@
     });
 
     document.querySelectorAll('.hole-left').forEach(h => {
-      h.style.left = `calc(50% - ${halfHole} - 2.5mm)`;
+      h.style.left = `calc(50% - ${halfHole} - 8mm)`;
     });
 
     document.querySelectorAll('.hole-right').forEach(h => {
-      h.style.left = `calc(50% + ${halfHole} + 2.5mm)`;
+      h.style.left = `calc(50% + ${halfHole} + 8mm)`;
     });
 
     document.querySelectorAll('.double-hole-zone').forEach(z => {
@@ -353,7 +353,7 @@
     });
   });
 
-  // Dynamic Notes Select Menu
+  // Dynamic Notes Menu
   const notesContainer = document.getElementById('notesGridContainer');
   const holes = document.querySelectorAll('.hole');
 
@@ -385,7 +385,7 @@
     notesContainer.appendChild(item);
   });
 
-  // Bordun / Drone Control
+  // Bordun / Drone
   let droneActive = false;
   const droneBtn = document.getElementById('droneBtn');
 
@@ -406,7 +406,7 @@
   droneBtn.addEventListener('click', toggleDrone);
   droneBtn.addEventListener('touchstart', toggleDrone, { passive: false });
 
-  // Multi-Touch Slider System
+  // Multi-Touch Event System
   function handleTouches(e) {
     e.preventDefault();
     
