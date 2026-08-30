@@ -14,7 +14,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #050505;
+      background-color: #0b0b0b;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -50,49 +50,70 @@
       box-shadow: 0 0 15px #ffd700;
     }
 
-    /* Container για την εικόνα και τις τρύπες */
+    /* Container Καλαμιών */
     .app-container {
       position: relative;
-      width: 100vw;
-      max-width: 420px;
-      height: 90vh;
-      margin-top: 35px;
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 15px;
+      margin-top: 40px;
     }
-    .instrument-img {
-      height: 100%;
-      width: auto;
-      object-fit: contain;
+
+    /* Σχεδιασμός Καλαμιού */
+    .pipe {
+      position: relative;
+      width: 50px; /* Αρχικό πλάτος καλαμιού */
+      height: 70vh;
+      background: linear-gradient(90deg, #5c3a21 0%, #a0683a 35%, #d19558 50%, #a0683a 65%, #5c3a21 100%);
+      border-radius: 12px;
+      border: 2px solid #3d2312;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.7), 0 5px 15px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      padding: 20px 0;
+      transition: width 0.2s ease;
     }
-    
-    /* Τρύπες (Μικρές & Ακριβείς) */
+
+    /* Τρύπες */
     .hole {
-      position: absolute;
-      width: 22px;
-      height: 22px;
+      width: 30px; /* Αρχικό μέγεθος τρύπας */
+      height: 30px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1.5px solid #ffd700;
-      transform: translate(-50%, -50%);
+      background: #111;
+      border: 2px solid #ffd700;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.9);
+      cursor: pointer;
       z-index: 2;
-      transition: background 0.05s, transform 0.05s;
+      transition: width 0.2s ease, height 0.2s ease, background 0.05s, transform 0.05s;
     }
     .hole.active {
       background: #ffd700;
-      box-shadow: 0 0 12px #ffd700;
-      transform: translate(-50%, -50%) scale(1.2);
+      box-shadow: 0 0 15px #ffd700;
+      transform: scale(1.15);
     }
 
-    /* Διπλές Ζώνες (Πάτημα στη μέση) */
-    .double-hole-zone {
+    /* Διπλές Ζώνες (Πάτημα ανάμεσα στα 2 καλάμια) */
+    .middle-bridge {
       position: absolute;
-      width: 65px;
-      height: 24px;
-      left: 50.4%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 20px 0;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .double-hole-zone {
+      width: 100%;
+      height: 40px;
+      pointer-events: auto;
       background: transparent;
     }
 
@@ -184,29 +205,32 @@
 </div>
 
 <div class="app-container">
-  <!-- Ενσωματωμένη Εικόνα (Δεν χρειάζεται εξωτερικό αρχείο!) -->
-  <img src="https://i.ibb.co/3ykp3kZ/angeion-bg.jpg" class="instrument-img" alt="Ποντιακό Αγγείον">
+  <!-- ΑΡΙΣΤΕΡΟ ΚΑΛΑΜΙ -->
+  <div class="pipe" id="leftPipe">
+    <div class="hole" id="hole-l1" data-note="440.00"></div>
+    <div class="hole" id="hole-l2" data-note="392.00"></div>
+    <div class="hole" id="hole-l3" data-note="349.23"></div>
+    <div class="hole" id="hole-l4" data-note="329.63"></div>
+    <div class="hole" id="hole-l5" data-note="293.66"></div>
+  </div>
 
-  <!-- ΑΡΙΣΤΕΡΟΣ ΑΥΛΟΣ -->
-  <div class="hole" id="hole-l1" style="top: 27.2%; left: 47.1%;" data-note="440.00"></div>
-  <div class="hole" id="hole-l2" style="top: 35.5%; left: 47.1%;" data-note="392.00"></div>
-  <div class="hole" id="hole-l3" style="top: 43.6%; left: 47.1%;" data-note="349.23"></div>
-  <div class="hole" id="hole-l4" style="top: 50.2%; left: 47.1%;" data-note="329.63"></div>
-  <div class="hole" id="hole-l5" style="top: 62.4%; left: 47.1%;" data-note="293.66"></div>
+  <!-- ΔΕΞΙ ΚΑΛΑΜΙ -->
+  <div class="pipe" id="rightPipe">
+    <div class="hole" id="hole-r1" data-note="440.00"></div>
+    <div class="hole" id="hole-r2" data-note="392.00"></div>
+    <div class="hole" id="hole-r3" data-note="349.23"></div>
+    <div class="hole" id="hole-r4" data-note="329.63"></div>
+    <div class="hole" id="hole-r5" data-note="293.66"></div>
+  </div>
 
-  <!-- ΔΕΞΙΟΣ ΑΥΛΟΣ -->
-  <div class="hole" id="hole-r1" style="top: 27.2%; left: 53.7%;" data-note="440.00"></div>
-  <div class="hole" id="hole-r2" style="top: 35.5%; left: 53.7%;" data-note="392.00"></div>
-  <div class="hole" id="hole-r3" style="top: 43.6%; left: 53.7%;" data-note="349.23"></div>
-  <div class="hole" id="hole-r4" style="top: 50.2%; left: 53.7%;" data-note="329.63"></div>
-  <div class="hole" id="hole-r5" style="top: 62.4%; left: 53.7%;" data-note="293.66"></div>
-
-  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ -->
-  <div class="double-hole-zone" style="top: 27.2%;" data-targets="hole-l1,hole-r1"></div>
-  <div class="double-hole-zone" style="top: 35.5%;" data-targets="hole-l2,hole-r2"></div>
-  <div class="double-hole-zone" style="top: 43.6%;" data-targets="hole-l3,hole-r3"></div>
-  <div class="double-hole-zone" style="top: 50.2%;" data-targets="hole-l4,hole-r4"></div>
-  <div class="double-hole-zone" style="top: 62.4%;" data-targets="hole-l5,hole-r5"></div>
+  <!-- ΔΙΠΛΕΣ ΖΩΝΕΣ (Για ταυτόχρονο πάτημα στη μέση) -->
+  <div class="middle-bridge">
+    <div class="double-hole-zone" data-targets="hole-l1,hole-r1"></div>
+    <div class="double-hole-zone" data-targets="hole-l2,hole-r2"></div>
+    <div class="double-hole-zone" data-targets="hole-l3,hole-r3"></div>
+    <div class="double-hole-zone" data-targets="hole-l4,hole-r4"></div>
+    <div class="double-hole-zone" data-targets="hole-l5,hole-r5"></div>
+  </div>
 </div>
 
 <!-- ΠΑΡΑΘΥΡΟ ΡΥΘΜΙΣΕΩΝ -->
@@ -217,10 +241,10 @@
       <button class="close-btn" id="closeSettingsBtn">&times;</button>
     </div>
 
-    <!-- Μέγεθος Τρυπών -->
+    <!-- Μέγεθος Τρυπών & Καλαμιού -->
     <div class="setting-group">
-      <label for="holeSizeSlider">Μέγεθος Τρυπών: <span id="sizeVal">22px</span></label>
-      <input type="range" id="holeSizeSlider" min="15" max="45" value="22">
+      <label for="holeSizeSlider">Μέγεθος Τρυπών & Καλαμιού: <span id="sizeVal">30px</span></label>
+      <input type="range" id="holeSizeSlider" min="20" max="55" value="30">
     </div>
 
     <!-- Επιλογή Νότας ανά Τρύπα -->
@@ -299,7 +323,7 @@
     if (!isAirActive) return;
 
     // Αριστερός Αυλός
-    const activeLeft = document.querySelector('.hole[id^="hole-l"].active');
+    const activeLeft = document.querySelector('#leftPipe .hole.active');
     if (activeLeft) {
       leftPipeOsc.frequency.setValueAtTime(parseFloat(activeLeft.getAttribute('data-note')), audioCtx.currentTime);
     } else {
@@ -307,7 +331,7 @@
     }
 
     // Δεξιός Αυλός
-    const activeRight = document.querySelector('.hole[id^="hole-r"].active');
+    const activeRight = document.querySelector('#rightPipe .hole.active');
     if (activeRight) {
       rightPipeOsc.frequency.setValueAtTime(parseFloat(activeRight.getAttribute('data-note')), audioCtx.currentTime);
     } else {
@@ -366,14 +390,25 @@
 
   const holeSizeSlider = document.getElementById('holeSizeSlider');
   const sizeValText = document.getElementById('sizeVal');
+  const leftPipe = document.getElementById('leftPipe');
+  const rightPipe = document.getElementById('rightPipe');
   
+  // Αυτόματη προσαρμογή Καλαμιού & Τρυπών μαζί
   holeSizeSlider.addEventListener('input', (e) => {
-    const newSize = e.target.value + 'px';
-    sizeValText.innerText = newSize;
+    const holeSize = parseInt(e.target.value);
+    const pipeWidth = holeSize + 20; // Το καλάμι είναι πάντα 20px πιο πλατύ από την τρύπα
+
+    sizeValText.innerText = holeSize + 'px';
+    
+    // Προσαρμογή τρυπών
     holes.forEach(h => {
-      h.style.width = newSize;
-      h.style.height = newSize;
+      h.style.width = holeSize + 'px';
+      h.style.height = holeSize + 'px';
     });
+
+    // Προσαρμογή πλάτους καλαμιών
+    leftPipe.style.width = pipeWidth + 'px';
+    rightPipe.style.width = pipeWidth + 'px';
   });
 
   // Δημιουργία Dropdowns στις Ρυθμίσεις
